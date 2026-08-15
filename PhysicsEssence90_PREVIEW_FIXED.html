@@ -1,0 +1,578 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+  <meta name="theme-color" content="#0b1220">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Physics Essence 90">
+  <meta name="format-detection" content="telephone=no">
+  <style>
+
+:root{
+  --bg:#f5f7fb;--surface:#ffffff;--surface2:#edf1f7;--text:#111827;--muted:#697386;
+  --line:#dfe5ee;--accent:#2563eb;--accent2:#dbeafe;--ok:#16803c;--warn:#b45309;--danger:#b42318;
+  --shadow:0 8px 28px rgba(15,23,42,.08);--radius:20px;
+  --safe-top:env(safe-area-inset-top);--safe-bottom:env(safe-area-inset-bottom);
+}
+[data-theme="dark"]{
+  --bg:#07101f;--surface:#0e192b;--surface2:#162237;--text:#f3f7ff;--muted:#9bacc4;
+  --line:#24344e;--accent:#6ea8ff;--accent2:#172d50;--ok:#63d58b;--warn:#f2b66d;--danger:#ff8d87;
+  --shadow:0 10px 30px rgba(0,0,0,.26);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Hiragino Sans","Yu Gothic UI",sans-serif}
+body{min-height:100dvh}
+button,input,select{font:inherit}
+button{cursor:pointer}
+.topbar{position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;padding:calc(12px + var(--safe-top)) 18px 12px;background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(16px);border-bottom:1px solid color-mix(in srgb,var(--line) 70%,transparent)}
+.eyebrow{font-size:11px;font-weight:800;letter-spacing:.08em;color:var(--accent)}
+h1{font-size:20px;margin:3px 0 0}.icon-btn{width:42px;height:42px;border:0;border-radius:14px;background:var(--surface);color:var(--text);box-shadow:var(--shadow)}
+.main{max-width:820px;margin:auto;padding:18px 16px calc(102px + var(--safe-bottom))}
+.tabbar{position:fixed;left:50%;bottom:0;transform:translateX(-50%);z-index:30;width:min(820px,100%);height:calc(68px + var(--safe-bottom));padding:6px 8px var(--safe-bottom);display:grid;grid-template-columns:repeat(5,1fr);background:color-mix(in srgb,var(--surface) 94%,transparent);backdrop-filter:blur(18px);border-top:1px solid var(--line)}
+.tab{position:relative;border:0;background:transparent;color:var(--muted);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;border-radius:14px}.tab span{font-size:20px}.tab small{font-size:10px;font-weight:700}.tab.active{color:var(--accent);background:var(--accent2)}
+.badge{position:absolute;top:3px;right:20%;background:var(--danger);color:white;border-radius:999px;min-width:18px;height:18px;padding:0 5px;font-size:10px;display:grid;place-items:center}.hidden{display:none!important}
+.hero{padding:22px;border-radius:26px;background:linear-gradient(145deg,var(--surface),var(--surface2));box-shadow:var(--shadow);border:1px solid var(--line)}
+.hero-grid{display:grid;grid-template-columns:1fr auto;gap:18px;align-items:center}.big-number{font-size:42px;font-weight:900;line-height:1}.muted{color:var(--muted)}
+.progress-ring{width:92px;height:92px;border-radius:50%;display:grid;place-items:center;background:conic-gradient(var(--accent) var(--pct),var(--line) 0);position:relative}.progress-ring:after{content:"";position:absolute;width:72px;height:72px;border-radius:50%;background:var(--surface)}.progress-ring strong{position:relative;z-index:1;font-size:16px}
+.actions{display:flex;gap:10px;margin-top:18px;flex-wrap:wrap}.primary,.secondary,.ghost,.choice{border-radius:14px;padding:13px 16px;font-weight:800}.primary{border:0;background:var(--accent);color:white}.secondary{border:1px solid var(--line);background:var(--surface);color:var(--text)}.ghost{border:0;background:var(--surface2);color:var(--text)}
+.section-title{display:flex;justify-content:space-between;align-items:end;margin:24px 2px 10px}.section-title h2{margin:0;font-size:18px}.section-title small{color:var(--muted)}
+.calendar{display:grid;grid-template-columns:repeat(7,1fr);gap:7px}.day{aspect-ratio:1;border:1px solid var(--line);border-radius:14px;background:var(--surface);color:var(--text);display:grid;place-items:center;font-size:12px;font-weight:800;position:relative}.day.done{background:var(--accent2);border-color:color-mix(in srgb,var(--accent) 40%,var(--line));color:var(--accent)}.day.current{outline:2px solid var(--accent);outline-offset:1px}.day.locked{opacity:.5}.day .dot{position:absolute;bottom:5px;width:4px;height:4px;border-radius:50%;background:var(--warn)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px}.stack{display:grid;gap:12px}.row{display:flex;gap:10px;align-items:center}.between{justify-content:space-between}.pill{display:inline-flex;align-items:center;gap:6px;border-radius:999px;background:var(--surface2);padding:6px 10px;font-size:11px;font-weight:800;color:var(--muted)}.pill.blue{background:var(--accent2);color:var(--accent)}
+.study-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}.study-progress{height:7px;background:var(--line);border-radius:999px;overflow:hidden}.study-progress i{display:block;height:100%;background:var(--accent);width:var(--w)}
+.flip-wrap{perspective:1200px;margin:16px 0}.flip{min-height:360px;position:relative;transform-style:preserve-3d;transition:transform .46s cubic-bezier(.2,.8,.2,1)}.flip.flipped{transform:rotateY(180deg)}.face{position:absolute;inset:0;backface-visibility:hidden;background:var(--surface);border:1px solid var(--line);border-radius:26px;box-shadow:var(--shadow);padding:24px;display:flex;flex-direction:column}.back{transform:rotateY(180deg)}.qtext{font-size:22px;font-weight:850;line-height:1.55;margin:18px 0}.answer{font-size:20px;font-weight:850;line-height:1.6}.essence{margin-top:16px;padding:16px;border-radius:16px;background:var(--surface2);line-height:1.7}.hint{margin-top:auto;color:var(--muted);font-size:13px}
+.rating{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}.rating button{border:1px solid var(--line);background:var(--surface);color:var(--text);padding:12px 6px;border-radius:14px;font-weight:800}.rating .weak{color:var(--danger)}.rating .ok{color:var(--ok)}
+.math{font-family:"Times New Roman",STIXGeneral,serif;font-size:1.05em;white-space:nowrap}.frac{display:inline-grid;grid-template-rows:auto auto;vertical-align:middle;text-align:center;line-height:1}.frac>span:first-child{border-bottom:1px solid currentColor;padding:0 .12em .05em}.frac>span:last-child{padding:.05em .12em 0}.sqrt{white-space:nowrap}.sup{font-size:.72em;vertical-align:super}.sub{font-size:.72em;vertical-align:sub}
+.challenge{padding:18px;border-radius:24px;background:var(--surface);border:1px solid var(--line);box-shadow:var(--shadow)}.stimulus{padding:14px;border-radius:16px;background:var(--surface2);line-height:1.65}.choice-list{display:grid;gap:9px;margin-top:16px}.choice{width:100%;text-align:left;border:1px solid var(--line);background:var(--surface);color:var(--text)}.choice.selected{border-color:var(--accent);background:var(--accent2)}.choice.correct{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 10%,var(--surface));color:var(--ok)}.choice.wrong{border-color:var(--danger);background:color-mix(in srgb,var(--danger) 9%,var(--surface));color:var(--danger)}
+.explain{margin-top:14px;padding:14px;border-left:4px solid var(--accent);background:var(--surface2);border-radius:8px 14px 14px 8px;line-height:1.65}
+.svgchart{width:100%;height:auto;max-height:240px;background:var(--surface);border-radius:14px;margin-top:12px}.axis{stroke:var(--muted);stroke-width:1}.gridline{stroke:var(--line);stroke-width:1}.plot{fill:none;stroke:var(--accent);stroke-width:3;stroke-linecap:round;stroke-linejoin:round}.plot2{fill:none;stroke:var(--warn);stroke-width:3}.charttext{fill:var(--muted);font-size:11px;font-family:system-ui,sans-serif}
+.table-wrap{overflow:auto;margin-top:12px;border:1px solid var(--line);border-radius:14px}table{width:100%;border-collapse:collapse;font-size:13px}th,td{padding:10px 12px;border-bottom:1px solid var(--line);text-align:center}th{background:var(--surface2)}tr:last-child td{border-bottom:0}
+.test-card{display:grid;gap:10px}.score{font-size:48px;font-weight:900}.result-ok{color:var(--ok)}.result-warn{color:var(--warn)}
+.review-list{display:grid;gap:10px}.review-item{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:14px;border:1px solid var(--line);border-radius:16px;background:var(--surface)}.review-item strong{display:block}.review-item small{color:var(--muted)}
+.kpi{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.kpi .card{padding:14px}.kpi strong{font-size:22px}.kpi small{display:block;color:var(--muted);margin-top:4px}
+.notice{padding:14px 16px;border-radius:16px;background:color-mix(in srgb,var(--accent) 8%,var(--surface));border:1px solid color-mix(in srgb,var(--accent) 30%,var(--line));line-height:1.6}
+.toast{position:fixed;left:50%;bottom:calc(82px + var(--safe-bottom));transform:translateX(-50%) translateY(16px);background:var(--text);color:var(--bg);padding:10px 14px;border-radius:999px;font-weight:800;font-size:12px;opacity:0;pointer-events:none;transition:.2s;z-index:50}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.setting-row{display:flex;justify-content:space-between;gap:16px;align-items:center;padding:14px 0;border-bottom:1px solid var(--line)}.setting-row:last-child{border-bottom:0}
+@media (max-width:520px){.qtext{font-size:20px}.flip{min-height:390px}.hero{padding:18px}.kpi{grid-template-columns:1fr 1fr 1fr}.calendar{gap:5px}.day{border-radius:11px}}
+@media (prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+
+  </style>
+  <title>Physics Essence 90 — Windows Preview FIXED</title>
+</head>
+<body>
+  <div id="app">
+    <header class="topbar">
+      <div>
+        <div class="eyebrow">2027 共通テスト対応 · PREVIEW FIXED</div>
+        <h1>Physics Essence 90</h1>
+      </div>
+      <button class="icon-btn" id="themeBtn" aria-label="テーマ切替">◐</button>
+    </header>
+
+    <main id="main" class="main"></main>
+
+    <nav class="tabbar" aria-label="メインナビゲーション">
+      <button data-tab="home" class="tab active"><span>⌂</span><small>ホーム</small></button>
+      <button data-tab="study" class="tab"><span>▣</span><small>学習</small></button>
+      <button data-tab="review" class="tab"><span>↻</span><small>復習</small><b id="reviewBadge" class="badge hidden">0</b></button>
+      <button data-tab="tests" class="tab"><span>✓</span><small>テスト</small></button>
+      <button data-tab="settings" class="tab"><span>⚙</span><small>設定</small></button>
+    </nav>
+  </div>
+  <div id="toast" class="toast" role="status"></div>
+  <script>
+
+const APP_VERSION = "2027.2-preview-fixed";
+const EMBEDDED_DB = {"version":"2027.2-pwa","title":"Physics Essence 90","subtitle":"2027 共通テスト対応","curriculumNote":"添付の物理本質データベースを核に、2027年度大学入学共通テストの問題作成方針に合わせ、グラフ読解・実験考察・初見資料型を各単元へ追加したPWA版。","sourcePolicy":{"base":"添付PDF「物理本質データベース：90日間偏差値60突破プログラム」","expanded":"2027年度大学入学共通テスト問題作成方針（大学入試センター）および高等学校学習指導要領解説 理科編","note":"追加問題は過去問の複製ではなく、方針に沿って新規作成した演習問題。"},"coreQuestions":[{"id":1,"unit":"力学","question":"等加速度直線運動で時間を含まない関係式を示し、使う条件を答えよ。","answer":"\\\\(v^2-v_0^2=2a\\\\Delta x\\\\)","essence":"加速度が一定のとき、\\(v=v_0+at\\) と変位の式から時間を消去して得る。時間が未知でも速度と変位を直接結べる。","sourceRef":"PDF ID 1","kind":"derivation"},{"id":2,"unit":"力学","question":"v-tグラフの傾きと、グラフと時間軸で囲まれる符号付き面積は何を表すか。","answer":"傾き：加速度。符号付き面積：変位。","essence":"\\\\(a=dv/dt\\\\)、\\\\(\\\\Delta x=\\\\int vdt\\\\)。距離ではなく「符号付き面積は変位」である。","sourceRef":"PDF ID 2","kind":"graph"},{"id":3,"unit":"力学","question":"斜方投射を水平・鉛直に分けると、それぞれどの運動として扱えるか。","answer":"水平：等速直線運動。鉛直：重力による等加速度運動。","essence":"空気抵抗を無視すれば水平加速度は0、鉛直加速度だけが\\(g\\)となる。2方向を独立に解き、時刻で結び直す。","sourceRef":"2027補完：平面運動","kind":"condition"},{"id":4,"unit":"力学","question":"運動方程式を立てる基本手順を3段階で述べよ。","answer":"①注目物体を決める ②その物体に働く力だけを描く ③軸を決めて各方向にΣF=maを立てる。","essence":"力を描く対象を混同しないことが最重要。作用反作用の2力は別々の物体に働く。","sourceRef":"PDF ID 7","kind":"process"},{"id":5,"unit":"力学","question":"静止摩擦力と動摩擦力の使い分けを説明せよ。","answer":"静止中は必要な大きさだけ働き、\\\\(|f_s|\\\\le \\\\mu_sN\\\\)。滑り出す直前のみ最大値。滑っている間は\\\\(f_k=\\\\mu_kN\\\\)を用いる。","essence":"「静止摩擦力は常に\\(\\mu_sN\\)」ではない。限界状態だけ等号になる。","sourceRef":"PDF ID 9-10","kind":"condition"},{"id":6,"unit":"力学","question":"フックの法則を向きまで含めて1次元で表せ。","answer":"\\\\(F_x=-kx\\\\)","essence":"ここで\\(x\\)は自然長位置からの符号付き変位。マイナスは復元力が変位と逆向きであることを示す。","sourceRef":"PDF ID 8・29を統合修正","kind":"concept"},{"id":7,"unit":"力学","question":"浮力の大きさを表す式と、Vが何の体積かを答えよ。","answer":"\\\\(F_B=\\\\rho_{fluid}V_{sub}g\\\\)","essence":"浮力は押しのけた流体の重さに等しい。密度は物体ではなく流体、体積は液面下にある部分。","sourceRef":"PDF ID 13-14","kind":"derivation"},{"id":8,"unit":"力学","question":"仕事と運動エネルギーの関係を答えよ。","answer":"\\\\(W_{net}=\\\\Delta K=\\\\frac12mv^2-\\\\frac12mv_0^2\\\\)","essence":"合力のした仕事は運動エネルギーの変化。力学的エネルギー保存が使えない場合にも成り立つ。","sourceRef":"PDF ID 15","kind":"concept"},{"id":9,"unit":"力学","question":"力学的エネルギー保存を使える代表条件を述べよ。","answer":"系に対して、摩擦などの非保存力が正味の仕事をしないこと。","essence":"重力・ばねなど保存力の仕事は位置エネルギーに移し替えられる。摩擦が仕事をすれば熱などへ移る。","sourceRef":"PDF ID 19-20","kind":"condition"},{"id":10,"unit":"力学","question":"力積と運動量変化の関係を示せ。","answer":"\\\\(\\\\vec I=\\\\int \\\\vec Fdt=\\\\Delta\\\\vec p\\\\)","essence":"短時間の衝突では力の時間変化が複雑でも、前後の運動量差から力積を求められる。","sourceRef":"PDF ID 21-22","kind":"concept"},{"id":11,"unit":"力学","question":"運動量保存則を使うために確認すべきことは何か。","answer":"注目する系への外力の力積が0、または無視できること。","essence":"「外力が存在しない」より正確には、考える時間区間で外力の力積が無視できるかを見る。","sourceRef":"PDF ID 23","kind":"condition"},{"id":12,"unit":"力学","question":"反発係数eを衝突前後の相対速度で表せ。","answer":"\\\\(e=-\\\\dfrac{v_{2f}-v_{1f}}{v_{2i}-v_{1i}}\\\\)","essence":"同一直線上で同じ符号規約を使う。完全弾性衝突では\\(e=1\\)。","sourceRef":"PDF ID 24","kind":"concept"},{"id":13,"unit":"力学","question":"等速円運動で加速度が0でない理由と大きさを答えよ。","answer":"速度ベクトルの向きが変わるから。\\\\(a_c=v^2/r=r\\\\omega^2\\\\)","essence":"速さ一定でも速度はベクトルなので向きの変化が加速度になる。向きは常に中心向き。","sourceRef":"PDF ID 25","kind":"concept"},{"id":14,"unit":"力学","question":"ばね振り子の単振動の周期を表せ。","answer":"\\\\(T=2\\\\pi\\\\sqrt{m/k}\\\\)","essence":"質量が大きいほど慣性が大きく周期は長い。ばね定数が大きいほど復元力が強く周期は短い。","sourceRef":"PDF ID 30 式崩れ修正","kind":"concept"},{"id":15,"unit":"力学","question":"単振動で速さが最大になる位置と最大値を答えよ。","answer":"中心\\\\(x=0\\\\)で最大。\\\\(v_{max}=A\\\\omega\\\\)","essence":"端点では速度0、中心では弾性位置エネルギーが最小で運動エネルギーが最大。","sourceRef":"PDF ID 31","kind":"concept"},{"id":16,"unit":"力学","question":"万有引力の式で距離rは何を表すか。","answer":"\\\\(F=Gm_1m_2/r^2\\\\) のrは質点間、球対称天体なら中心間距離。","essence":"地表から高度\\(h\\)なら地球半径\\(R\\)を足し\\(r=R+h\\)とする。","sourceRef":"PDF ID 32","kind":"condition"},{"id":17,"unit":"力学","question":"第一宇宙速度を求める基本方針を述べよ。","answer":"地表すれすれの円運動として\\\\(mv^2/R=GMm/R^2\\\\)を立て、\\\\(v=\\\\sqrt{GM/R}=\\\\sqrt{gR}\\\\)。","essence":"「向心力」という別の力を追加せず、万有引力の合力が向心加速度を生むと考える。","sourceRef":"PDF ID 34","kind":"derivation"},{"id":18,"unit":"力学","question":"ケプラー第3法則の定数が同じになる条件を答えよ。","answer":"同じ中心天体を回る場合。\\\\(T^2/a^3=4\\\\pi^2/(GM)\\\\)","essence":"定数は中心天体の質量\\(M\\)で決まる。","sourceRef":"PDF ID 35","kind":"concept"},{"id":19,"unit":"力学","question":"剛体が静止するための2つのつり合い条件を答えよ。","answer":"\\\\(\\\\sum\\\\vec F=0\\\\) かつ任意の点まわりで\\\\(\\\\sum\\\\tau=0\\\\)。","essence":"並進しない条件だけでなく回転しない条件も必要。モーメントの腕は作用線までの垂直距離。","sourceRef":"2027補完：剛体のつり合い","kind":"condition"},{"id":20,"unit":"力学","question":"次元解析を検算に使うとはどういうことか。","answer":"式の両辺が同じ物理次元・単位になっているか確認すること。","essence":"数値計算前後に行うと、速度と加速度の取り違えなどを高速に発見できる。","sourceRef":"PDF ID 90","kind":"process"},{"id":21,"unit":"熱力学","question":"理想気体の状態方程式と、SI単位を答えよ。","answer":"\\\\(PV=nRT\\\\)。P:Pa、V:m³、T:K。","essence":"\\(R=8.31\\,J/(mol\\cdot K)\\)を用いるならSI単位へそろえる。","sourceRef":"PDF ID 36","kind":"concept"},{"id":22,"unit":"熱力学","question":"摂氏温度tと絶対温度Tの関係を示せ。","answer":"\\\\(T[K]=t[°C]+273.15\\\\)","essence":"温度差は1 Kと1 ℃で同じ幅だが、状態方程式には絶対温度を使う。","sourceRef":"PDF ID 37","kind":"concept"},{"id":23,"unit":"熱力学","question":"熱力学第1法則を「気体が外部へした仕事W」とする符号規約で表せ。","answer":"\\\\(\\\\Delta U=Q-W\\\\)","essence":"Qは気体が受け取った熱、Wは気体が外部へした仕事。教科書で符号規約が違う場合があるので定義を先に確認する。","sourceRef":"PDF ID 38 符号規約を明示","kind":"condition"},{"id":24,"unit":"熱力学","question":"単原子分子理想気体の内部エネルギーを表せ。","answer":"\\\\(U=\\\\frac32nRT\\\\)","essence":"理想気体では分子間ポテンシャルを無視し、内部エネルギーは温度だけで決まる。","sourceRef":"PDF ID 39","kind":"concept"},{"id":25,"unit":"熱力学","question":"定積変化で、加えた熱Qと内部エネルギー変化の関係を答えよ。","answer":"\\\\(Q=\\\\Delta U\\\\)","essence":"体積変化がないので境界仕事\\(W=\\int PdV=0\\)。","sourceRef":"PDF ID 40","kind":"concept"},{"id":26,"unit":"熱力学","question":"定圧変化で気体がした仕事を表せ。","answer":"\\\\(W=P\\\\Delta V=nR\\\\Delta T\\\\)","essence":"P-Vグラフでは面積が仕事。定圧なら長方形の面積になる。","sourceRef":"PDF ID 41","kind":"graph"},{"id":27,"unit":"熱力学","question":"理想気体の等温変化で内部エネルギー変化はいくらか。","answer":"\\\\(\\\\Delta U=0\\\\)","essence":"理想気体の内部エネルギーは温度だけで決まり、等温なら変化しない。したがって\\(Q=W\\)。","sourceRef":"PDF ID 42","kind":"concept"},{"id":28,"unit":"熱力学","question":"断熱膨張で温度が下がる理由を第1法則から説明せよ。","answer":"Q=0で、気体が外部へ仕事をするため内部エネルギーが減少するから。","essence":"\\\\(Q=0\\\\)かつ\\\\(W>0\\\\)なら\\\\(\\\\Delta U=-W<0\\\\)。理想気体では温度低下に対応する。","sourceRef":"PDF ID 43","kind":"derivation"},{"id":29,"unit":"熱力学","question":"定圧モル比熱Cpと定積モル比熱Cvの関係を示せ。","answer":"\\\\(C_p=C_v+R\\\\)","essence":"定圧では内部エネルギー増加に加えて膨張仕事にも熱が使われる。","sourceRef":"PDF ID 44","kind":"concept"},{"id":30,"unit":"熱力学","question":"単原子分子理想気体のCvとCpを答えよ。","answer":"\\\\(C_v=\\\\frac32R,\\\\quad C_p=\\\\frac52R\\\\)","essence":"内部エネルギー\\(U=3nRT/2\\)とマイヤーの関係から得る。","sourceRef":"PDF ID 45","kind":"derivation"},{"id":31,"unit":"熱力学","question":"単原子分子理想気体の比熱比γを答えよ。","answer":"\\\\(\\\\gamma=C_p/C_v=5/3\\\\)","essence":"断熱変化\\(PV^\\gamma=const.\\)に現れる。","sourceRef":"PDF ID 46","kind":"concept"},{"id":32,"unit":"熱力学","question":"P-Vグラフで気体がした仕事は何で表されるか。","answer":"\\\\(W=\\\\int P\\\\,dV\\\\) で、曲線下の符号付き面積。","essence":"膨張なら正、圧縮なら負という符号規約を使う。","sourceRef":"2027補完：P-Vグラフ","kind":"graph"},{"id":33,"unit":"熱力学","question":"熱機関の熱効率を吸収熱Qinと放出熱Qoutで表せ。","answer":"\\\\(e=1-Q_{out}/Q_{in}\\\\)","essence":"1周期で内部エネルギーは元に戻るため、正味仕事は\\(Q_{in}-Q_{out}\\)。","sourceRef":"PDF ID 47","kind":"concept"},{"id":34,"unit":"熱力学","question":"気体のモル比熱が過程によって変わり得る理由を説明せよ。","answer":"同じ温度上昇でも、体積変化や仕事の大きさが過程ごとに異なるため。","essence":"Q=nCΔTのCは「どの過程で加熱したか」に依存する。","sourceRef":"PDF ID 48","kind":"concept"},{"id":35,"unit":"熱力学","question":"気体分子の二乗平均平方根速度をモル質量Mで表せ。","answer":"\\\\(v_{rms}=\\\\sqrt{3RT/M}\\\\)","essence":"温度が高いほど速く、モル質量が小さいほど速い。Mはkg/molでそろえる。","sourceRef":"PDF ID 49","kind":"concept"},{"id":36,"unit":"熱力学","question":"圧力を分子運動の観点から説明せよ。","answer":"分子が壁に衝突して与える力積が、時間・面積あたりに平均化されたもの。","essence":"圧力はミクロな多数回の衝突をマクロに平均した量。","sourceRef":"PDF ID 96","kind":"concept"},{"id":37,"unit":"熱力学","question":"熱力学第2法則の代表的な不可逆過程を1つ説明せよ。","answer":"孤立した高温物体と低温物体を接触させると、自然には高温から低温へ熱が移る。","essence":"第1法則がエネルギー量を制約し、第2法則が自然に進む向きを制約する。","sourceRef":"PDF ID 50","kind":"concept"},{"id":38,"unit":"熱力学","question":"同じ状態点を通る等温線と断熱線では、P-V図で一般にどちらが急か。","answer":"断熱線。","essence":"理想気体では等温\\(PV=const.\\)、断熱\\(PV^\\gamma=const.\\)で\\(\\gamma>1\\)。","sourceRef":"PDF ID 89","kind":"graph"},{"id":39,"unit":"熱力学","question":"物体の温度変化に必要な熱量を比熱cで表せ。","answer":"\\\\(Q=mc\\\\Delta T\\\\)","essence":"相変化がない範囲の顕熱。熱平衡問題では各物体の受け取る熱・失う熱の収支をとる。","sourceRef":"2027補完：熱量","kind":"concept"},{"id":40,"unit":"熱力学","question":"相変化中の熱量を潜熱Lで表せ。","answer":"\\\\(Q=mL\\\\)","essence":"融解・沸騰など相変化中は、加えた熱が主に状態変化へ使われ、温度が一定の区間が現れる。","sourceRef":"2027補完：潜熱","kind":"concept"},{"id":41,"unit":"波動","question":"波の速さv、振動数f、波長λの関係を示せ。","answer":"\\\\(v=f\\\\lambda\\\\)","essence":"同じ媒質では波速が媒質の性質で決まり、波源の振動数が変わると波長が変わる。","sourceRef":"PDF ID 51","kind":"concept"},{"id":42,"unit":"波動","question":"同位相の2点の最短距離は波長でいくらか。","answer":"\\\\(\\\\lambda\\\\)","essence":"位相差は\\(2\\pi\\Delta x/\\lambda\\)。節・腹の間隔と混同しない。","sourceRef":"2027補完：位相","kind":"concept"},{"id":43,"unit":"波動","question":"定常波で隣り合う節どうしの距離を答えよ。","answer":"\\\\(\\\\lambda/2\\\\)","essence":"節と腹の距離は\\(\\lambda/4\\)。","sourceRef":"PDF ID 53","kind":"concept"},{"id":44,"unit":"波動","question":"うなりの振動数を答え、その意味を述べよ。","answer":"\\\\(f_b=|f_1-f_2|\\\\)。1秒あたりの音の強弱の回数。","essence":"近い振動数の波の重ね合わせで包絡線がゆっくり変化する。","sourceRef":"PDF ID 54","kind":"concept"},{"id":45,"unit":"波動","question":"音源が観測者へ近づくと、なぜ高く聞こえるか。","answer":"媒質中の音速は同じでも、音源前方の波長が短くなるから。","essence":"観測者が静止なら\\\\(f\\' = Vf/(V-v_s)\\\\)。","sourceRef":"PDF ID 55","kind":"concept"},{"id":46,"unit":"波動","question":"観測者が静止音源へ近づくと、なぜ高く聞こえるか。","answer":"観測者が波面に出会う相対速度が大きくなるから。","essence":"波長は変わらず、\\\\(f\\'=(V+v_o)f/V\\\\)。","sourceRef":"PDF ID 56","kind":"concept"},{"id":47,"unit":"波動","question":"風があるドップラー効果で最も安全な速度の扱いを述べよ。","answer":"音速は空気（媒質）に対してV。音源・観測者の速度もまず媒質に対する速度へ直して式を立てる。","essence":"一様な風では「Vだけを機械的に足し引きする」より、媒質基準に統一すると符号ミスを防げる。","sourceRef":"PDF ID 69 修正","kind":"condition"},{"id":48,"unit":"波動","question":"屈折で境界を越えても変わらない量と、変わる量を答えよ。","answer":"振動数は不変。波速と波長は変わる。","essence":"\\\\(v=f\\\\lambda\\\\)より、f一定ならvの変化に応じてλが変わる。","sourceRef":"PDF ID 58","kind":"concept"},{"id":49,"unit":"波動","question":"全反射が起こる2条件を答えよ。","answer":"屈折率の大きい媒質から小さい媒質へ進み、入射角が臨界角より大きいこと。","essence":"臨界角では屈折角が90°。\\\\(\\\\sin\\\\theta_c=n_2/n_1\\\\)（\\\\(n_1>n_2\\\\)）。","sourceRef":"PDF ID 59","kind":"condition"},{"id":50,"unit":"波動","question":"弦を伝わる波の速さを、張力Tと線密度μで表せ。","answer":"\\\\(v=\\\\sqrt{T/\\\\mu}\\\\)","essence":"元資料のρ表記は体積密度と紛らわしいため、線密度を通常の\\(\\mu\\)で表す。","sourceRef":"PDF ID 60 表記改善","kind":"concept"},{"id":51,"unit":"波動","question":"両端固定弦の基本振動数を答えよ。","answer":"\\\\(f_1=\\\\dfrac{1}{2L}\\\\sqrt{T/\\\\mu}\\\\)","essence":"基本振動では弦長\\(L=\\lambda/2\\)。","sourceRef":"PDF ID 60","kind":"derivation"},{"id":52,"unit":"波動","question":"閉管の基本振動で管長Lと波長λの関係を答えよ。","answer":"\\\\(L=\\\\lambda/4\\\\)","essence":"閉端が変位の節、開口端が腹。閉管では基本的に奇数次の共鳴が現れる。","sourceRef":"PDF ID 61","kind":"concept"},{"id":53,"unit":"波動","question":"反射で位相がπだけ反転する代表条件を答えよ。","answer":"波がより屈折率の大きい媒質側の境界で反射するとき。","essence":"薄膜干渉では光路差だけでなく、各反射で位相反転があるかを必ず確認する。","sourceRef":"PDF ID 62","kind":"condition"},{"id":54,"unit":"波動","question":"ヤングの干渉で明線間隔を表せ。","answer":"\\\\(\\\\Delta x=\\\\dfrac{L\\\\lambda}{d}\\\\)","essence":"小角近似の下で、波長が長いほど縞は広く、スリット間隔dが大きいほど狭い。","sourceRef":"PDF ID 63","kind":"derivation"},{"id":55,"unit":"波動","question":"回折格子の主極大条件を答えよ。","answer":"\\\\(d\\\\sin\\\\theta=m\\\\lambda\\\\)","essence":"多数のスリットがあるため特定角度で鋭い極大ができる。","sourceRef":"PDF ID 67","kind":"concept"},{"id":56,"unit":"波動","question":"薄レンズの公式と、凹レンズの焦点距離の符号を答えよ。","answer":"\\\\(1/a+1/b=1/f\\\\)、この符号規約では凹レンズは\\\\(f<0\\\\)。","essence":"元資料の「凹面鏡は発散」という記述は誤り。凹面鏡は別の光学系で、通常は収束性をもつ。","sourceRef":"PDF ID 64 修正","kind":"condition"},{"id":57,"unit":"波動","question":"薄レンズの横倍率を符号付きで表せ。","answer":"\\\\(m=-b/a\\\\)","essence":"絶対値\\(|m|\\)は像の大きさの比、符号は正立・倒立を表す。","sourceRef":"PDF ID 65-66 改善","kind":"concept"},{"id":58,"unit":"波動","question":"ニュートンリングを反射光で見ると中心が暗くなる基本理由を答えよ。","answer":"中心では幾何学的光路差がほぼ0でも、一方の反射だけ位相がπ反転し、逆相になるから。","essence":"反射位相の扱いを忘れると明暗条件が逆転する。","sourceRef":"PDF ID 68","kind":"concept"},{"id":59,"unit":"波動","question":"白色光がプリズムで分散する理由を答えよ。","answer":"屈折率が波長によって異なるから。","essence":"通常の可視域では色によって屈折角が異なり、スペクトルに分かれる。","sourceRef":"PDF ID 70","kind":"concept"},{"id":60,"unit":"波動","question":"波の干渉で経路差が整数倍の波長でも弱め合うことがあるのはなぜか。","answer":"2波の初期位相が逆相、または反射で片方だけπ反転している場合があるから。","essence":"「経路差だけ」で暗記せず、初期位相と反射位相を含む総位相差で判断する。","sourceRef":"PDF ID 97","kind":"condition"},{"id":61,"unit":"電磁気","question":"クーロンの法則を2点電荷で表せ。","answer":"\\\\(F=k\\\\dfrac{|q_1q_2|}{r^2}\\\\)","essence":"同符号は反発、異符号は引力。力の向きは2電荷を結ぶ直線上。","sourceRef":"2027補完：電場と電位","kind":"concept"},{"id":62,"unit":"電磁気","question":"電場Eの定義を試験電荷qに働く力Fで表せ。","answer":"\\\\(\\\\vec E=\\\\vec F/q\\\\)","essence":"電場は「その場所が単位正電荷に及ぼす力」を表す。試験電荷自身が電場を作る影響は無視する。","sourceRef":"2027補完：電場","kind":"concept"},{"id":63,"unit":"電磁気","question":"点電荷Qが距離rに作る電場の大きさを答えよ。","answer":"\\\\(E=k|Q|/r^2\\\\)","essence":"正電荷から外向き、負電荷へ内向き。複数電荷ならベクトル和を取る。","sourceRef":"2027補完：電場","kind":"concept"},{"id":64,"unit":"電磁気","question":"電位Vと電位エネルギーUの関係を答えよ。","answer":"\\\\(U=qV\\\\)","essence":"電位は単位電荷あたりの位置エネルギー。電位差が仕事・エネルギーと直接結びつく。","sourceRef":"2027補完：電位","kind":"concept"},{"id":65,"unit":"電磁気","question":"一様電場E中で、電場方向に距離d進んだときの電位差の大きさを答えよ。","answer":"\\\\(|\\\\Delta V|=Ed\\\\)","essence":"電場は高電位から低電位へ向くので、電場方向へ進むと電位は下がる。","sourceRef":"2027補完：電位","kind":"concept"},{"id":66,"unit":"電磁気","question":"コンデンサーの基本関係を答えよ。","answer":"\\\\(Q=CV\\\\)","essence":"Cは形状・誘電体で決まり、Qは蓄えた電荷、Vは極板間電圧。","sourceRef":"2027補完：コンデンサー","kind":"concept"},{"id":67,"unit":"電磁気","question":"平行板コンデンサーの電気容量を答えよ。","answer":"\\\\(C=\\\\varepsilon S/d\\\\)","essence":"極板面積Sが大きいほど容量は大きく、間隔dが広いほど小さい。","sourceRef":"2027補完：コンデンサー","kind":"concept"},{"id":68,"unit":"電磁気","question":"コンデンサーに蓄えられるエネルギーを3通りで表せ。","answer":"\\\\(U=\\\\frac12CV^2=\\\\frac12QV=\\\\frac{Q^2}{2C}\\\\)","essence":"どの形を使うかは問題で一定に保たれる量に合わせる。","sourceRef":"2027補完：コンデンサー","kind":"concept"},{"id":69,"unit":"電磁気","question":"コンデンサーの並列接続の合成容量を答えよ。","answer":"\\\\(C_{eq}=C_1+C_2+\\\\cdots\\\\)","essence":"並列では各コンデンサーの電圧が等しく、電荷が加算される。","sourceRef":"2027補完：コンデンサー","kind":"concept"},{"id":70,"unit":"電磁気","question":"コンデンサーの直列接続の合成容量を答えよ。","answer":"\\\\(1/C_{eq}=1/C_1+1/C_2+\\\\cdots\\\\)","essence":"直列では各コンデンサーに蓄えられる電荷の大きさが等しい。","sourceRef":"2027補完：コンデンサー","kind":"concept"},{"id":71,"unit":"電磁気","question":"電流Iの定義を電荷量Qで表せ。","answer":"\\\\(I=dQ/dt\\\\)","essence":"一定電流なら\\(I=Q/t\\)。向きは正電荷の流れる向きとして定義する。","sourceRef":"2027補完：電流","kind":"concept"},{"id":72,"unit":"電磁気","question":"オームの法則を答えよ。","answer":"\\\\(V=IR\\\\)","essence":"抵抗が一定とみなせる範囲で成立。グラフではV-I関係の傾きの取り方に注意する。","sourceRef":"2027補完：電流","kind":"concept"},{"id":73,"unit":"電磁気","question":"一様な導線の抵抗を抵抗率ρ、長さL、断面積Sで表せ。","answer":"\\\\(R=\\\\rho L/S\\\\)","essence":"長いほど抵抗大、太いほど抵抗小。ρは物質と温度に依存する。","sourceRef":"2027補完：電流","kind":"concept"},{"id":74,"unit":"電磁気","question":"電力PをV、I、Rで表す代表式を答えよ。","answer":"\\\\(P=VI=I^2R=V^2/R\\\\)","essence":"どの量が一定かを見て最も便利な形を選ぶ。","sourceRef":"2027補完：電力","kind":"concept"},{"id":75,"unit":"電磁気","question":"キルヒホッフの第1法則を述べよ。","answer":"接点へ流れ込む電流の総和と、流れ出る電流の総和は等しい。","essence":"電荷保存の表現。複雑な回路では電流方向を仮定して符号付きで式を立てる。","sourceRef":"2027補完：回路","kind":"concept"},{"id":76,"unit":"電磁気","question":"キルヒホッフの第2法則を述べよ。","answer":"閉回路を一周した電位差の代数和は0。","essence":"電池の起電力上昇と抵抗での電圧降下を符号付きで足す。","sourceRef":"2027補完：回路","kind":"concept"},{"id":77,"unit":"電磁気","question":"磁場B中を速度vで動く電荷qに働くローレンツ力の大きさを答えよ。","answer":"\\\\(F=|q|vB\\\\sin\\\\theta\\\\)","essence":"力は速度と磁場の両方に垂直。磁力だけなら仕事をせず、速さは変えない。","sourceRef":"2027補完：磁場","kind":"concept"},{"id":78,"unit":"電磁気","question":"一様磁場に垂直に入射した荷電粒子の円運動半径を答えよ。","answer":"\\\\(r=mv/(|q|B)\\\\)","essence":"ローレンツ力が向心力となる。速さが大きいほど半径大、磁場が強いほど小さい。","sourceRef":"2027補完：磁場","kind":"derivation"},{"id":79,"unit":"電磁気","question":"磁場B中の長さLの直線電流Iに働く力の大きさを答えよ。","answer":"\\\\(F=BIL\\\\sin\\\\theta\\\\)","essence":"電流方向と磁場方向の外積で向きが決まる。","sourceRef":"2027補完：電流と磁場","kind":"concept"},{"id":80,"unit":"電磁気","question":"長い直線電流Iから距離rの磁場の大きさを答えよ。","answer":"\\\\(B=\\\\mu_0I/(2\\\\pi r)\\\\)","essence":"向きは右ねじの法則。距離に反比例する。","sourceRef":"2027補完：電流と磁場","kind":"concept"},{"id":81,"unit":"電磁気","question":"電磁誘導のファラデーの法則を答えよ。","answer":"\\\\(\\\\mathcal{E}=-d\\\\Phi/dt\\\\)","essence":"磁束\\(\\Phi\\)の時間変化が誘導起電力を生む。巻数Nなら\\(\\mathcal{E}=-N d\\Phi/dt\\)。","sourceRef":"2027補完：電磁誘導","kind":"concept"},{"id":82,"unit":"電磁気","question":"レンツの法則を言葉で説明せよ。","answer":"誘導電流は、原因となった磁束の変化を妨げる向きに流れる。","essence":"マイナス符号は「磁束そのもの」ではなく「磁束の変化」に逆らうことを表す。","sourceRef":"2027補完：電磁誘導","kind":"condition"},{"id":83,"unit":"電磁気","question":"長さLの導体棒が磁場Bに垂直に速さvで動くときの誘導起電力を答えよ。","answer":"\\\\(\\\\mathcal{E}=BLv\\\\)","essence":"B、L、vが互いに直交する基本形。一般には磁束変化から判断する。","sourceRef":"2027補完：電磁誘導","kind":"concept"},{"id":84,"unit":"電磁気","question":"自己誘導で生じる誘導起電力を表せ。","answer":"\\\\(\\\\mathcal{E}=-L\\\\,dI/dt\\\\)","essence":"コイルは電流の急な変化を妨げる向きに起電力を生む。Lは自己インダクタンス。","sourceRef":"2027補完：自己誘導","kind":"concept"},{"id":85,"unit":"電磁気","question":"理想変圧器の巻数比と電圧比の関係を答えよ。","answer":"\\\\(V_2/V_1=N_2/N_1\\\\)","essence":"理想なら入力電力と出力電力が等しく、電流比は巻数比の逆になる。","sourceRef":"2027補完：交流","kind":"concept"},{"id":86,"unit":"原子","question":"光電効果で光の強度だけを上げると主に何が増えるか。","answer":"しきい振動数を超えているなら、放出される光電子数（光電流）が増える。","essence":"最大運動エネルギーは主に光の振動数で決まり、強度だけでは増えない。","sourceRef":"PDF ID 71","kind":"concept"},{"id":87,"unit":"原子","question":"光電効果のアインシュタインの式を答えよ。","answer":"\\\\(K_{max}=h\\\\nu-W\\\\)","essence":"Wは仕事関数。\\(h\\nu<W\\)なら強度を上げても光電子は出ない。","sourceRef":"PDF ID 72","kind":"concept"},{"id":88,"unit":"原子","question":"光子のエネルギーと運動量を波長で表せ。","answer":"\\\\(E=hc/\\\\lambda,\\\\quad p=h/\\\\lambda\\\\)","essence":"光子は静止質量0で、\\(E=pc\\)と\\(E=h\\nu\\)から\\(p=h/\\lambda\\)を得る。元資料のE=mc²を直接使う説明は修正。","sourceRef":"PDF ID 74 修正","kind":"derivation"},{"id":89,"unit":"原子","question":"コンプトン散乱で散乱光の波長が長くなる理由を説明せよ。","answer":"光子が電子へエネルギーと運動量を渡し、散乱後の光子エネルギーが小さくなるから。","essence":"\\\\(E=hc/\\\\lambda\\\\)なのでエネルギー減少は波長増加に対応する。","sourceRef":"PDF ID 73","kind":"concept"},{"id":90,"unit":"原子","question":"ド・ブロイ波長を運動量pで表せ。","answer":"\\\\(\\\\lambda=h/p\\\\)","essence":"非相対論的粒子なら\\(p=mv\\)より\\(\\lambda=h/(mv)\\)。巨視的物体では波長が非常に短い。","sourceRef":"PDF ID 75","kind":"concept"},{"id":91,"unit":"原子","question":"1 eVをJに換算せよ。","answer":"\\\\(1\\\\,eV=1.602\\\\times10^{-19}\\\\,J\\\\)","essence":"電子1個が1 Vの電位差で得るエネルギー。","sourceRef":"PDF ID 76","kind":"concept"},{"id":92,"unit":"原子","question":"ボーアの量子条件を物質波の定常波として説明せよ。","answer":"軌道一周が物質波の整数個分：\\\\(2\\\\pi r=n\\\\lambda\\\\)。","essence":"周回後に位相がそろう軌道だけが定常状態として許される、というモデル。","sourceRef":"PDF ID 77","kind":"concept"},{"id":93,"unit":"原子","question":"原子が振動数νの光を放出する条件をエネルギー準位で表せ。","answer":"\\\\(E_{high}-E_{low}=h\\\\nu\\\\)","essence":"高い準位から低い準位への遷移で差分エネルギーの光子を放出する。","sourceRef":"PDF ID 78","kind":"concept"},{"id":94,"unit":"原子","question":"連続X線と特性X線の発生機構の違いを説明せよ。","answer":"連続X線：高速電子の減速による制動放射。特性X線：内殻空孔へ外側電子が遷移するときの固有エネルギー差。","essence":"特性X線のエネルギーは標的元素に固有。","sourceRef":"PDF ID 79","kind":"concept"},{"id":95,"unit":"原子","question":"核種記号のAとZは何を表すか。","answer":"A：質量数（陽子数+中性子数）、Z：原子番号（陽子数）。","essence":"同じZで中性子数が違う核種が同位体。","sourceRef":"PDF ID 80","kind":"concept"},{"id":96,"unit":"原子","question":"α線、β⁻線、γ線の正体を答えよ。","answer":"α線：ヘリウム原子核、β⁻線：高速電子、γ線：高エネルギー電磁波。","essence":"βにはβ⁺もあるので、元資料の「β線=電子」はβ⁻線として扱うと正確。","sourceRef":"PDF ID 81 改善","kind":"concept"},{"id":97,"unit":"原子","question":"β⁻崩壊で原子番号Zと質量数Aはどう変わるか。","answer":"Zは1増え、Aは変わらない。","essence":"中性子が陽子・電子・反ニュートリノへ変わる。元資料の「β崩壊」一般ではなくβ⁻と限定。","sourceRef":"PDF ID 82 修正","kind":"concept"},{"id":98,"unit":"原子","question":"β⁺崩壊で原子番号Zと質量数Aはどう変わるか。","answer":"Zは1減り、Aは変わらない。","essence":"陽子が中性子・陽電子・ニュートリノへ変わる。β⁻との対比で覚える。","sourceRef":"2027補完：β+","kind":"concept"},{"id":99,"unit":"原子","question":"半減期Tで未崩壊核数Nを表せ。","answer":"\\\\(N=N_0(1/2)^{t/T}\\\\)","essence":"個々の核崩壊は確率的だが、多数の核は指数関数的に減少する。","sourceRef":"PDF ID 83","kind":"concept"},{"id":100,"unit":"原子","question":"質量欠損と結合エネルギーの関係を答えよ。","answer":"\\\\(E_b=\\\\Delta mc^2\\\\)","essence":"結合した原子核の質量が自由な核子の質量和より小さい分が結合エネルギーに対応する。","sourceRef":"PDF ID 84","kind":"concept"},{"id":101,"unit":"原子","question":"1核子あたりの結合エネルギーが大きいほど原子核は一般にどうなるか。","answer":"より強く結合し、安定性が高い傾向がある。","essence":"核分裂・核融合のエネルギーを考える際は、反応前後の総結合エネルギー差を見る。","sourceRef":"PDF ID 85 改善","kind":"concept"},{"id":102,"unit":"原子","question":"核分裂でエネルギーが放出される基本理由を説明せよ。","answer":"重い核が中程度の質量の核へ分かれ、生成物全体の結合がより強くなり、質量差がエネルギーとして放出されるため。","essence":"すべての分裂が自動的に発熱という意味ではなく、実際の反応前後の質量差で判断する。","sourceRef":"PDF ID 85 改善","kind":"concept"},{"id":103,"unit":"原子","question":"軽い原子核の核融合でエネルギーが放出される基本理由を説明せよ。","answer":"生成核の1核子あたり結合エネルギーが増える反応では、質量差がエネルギーとして放出されるため。","essence":"鉄付近へ近づく方向の反応が典型的にエネルギーを放出する。","sourceRef":"PDF ID 85 改善","kind":"concept"},{"id":104,"unit":"原子","question":"光の波動性を示す現象と粒子性を示す現象を1つずつ答えよ。","answer":"波動性：干渉・回折。粒子性：光電効果・コンプトン効果。","essence":"実験によって波と粒子の両方の性質が現れる。","sourceRef":"PDF ID 99","kind":"concept"},{"id":105,"unit":"原子","question":"原子スペクトルが連続ではなく線になる基本理由を答えよ。","answer":"電子の許されるエネルギー準位が離散的で、準位差に対応する光子だけが吸収・放出されるから。","essence":"\\\\(h\\\\nu=|E_m-E_n|\\\\)。","sourceRef":"PDF ID 78 を発展","kind":"concept"},{"id":106,"unit":"総仕上げ","question":"運動量保存と力学的エネルギー保存の条件の違いを述べよ。","answer":"運動量は外力の力積が0なら保存。力学的エネルギーは非保存力が正味の仕事をしない等の条件が必要。","essence":"非弾性衝突でも孤立系なら運動量は保存するが、運動エネルギーは一般に保存しない。","sourceRef":"PDF ID 86","kind":"compare"},{"id":107,"unit":"総仕上げ","question":"仕事の定義と仕事率を、積分・時間微分で表せ。","answer":"\\\\(W=\\\\int \\\\vec F\\\\cdot d\\\\vec r\\\\)、\\\\(P=dW/dt=\\\\vec F\\\\cdot\\\\vec v\\\\)","essence":"元資料ID94は問いと答えがずれていたため、仕事と仕事率を分けて明確化した。","sourceRef":"PDF ID 94 修正","kind":"derivation"},{"id":108,"unit":"総仕上げ","question":"公式を選ぶ前に必ず確認する3項目を答えよ。","answer":"①対象と系 ②成り立つ条件 ③各量の向き・符号・単位。","essence":"「見たことのある形だから公式を当てはめる」を避ける。","sourceRef":"PDF ID 100","kind":"process"},{"id":109,"unit":"総仕上げ","question":"未知のグラフ・実験データ問題で最初に見るべきものを3つ挙げよ。","answer":"軸と単位、変化量の定義、比例・傾き・面積などの物理的意味。","essence":"2027共通テストは概念理解だけでなく、観察・実験・資料の分析と考察を重視するための実戦手順。","sourceRef":"2027補完：共通テスト型","kind":"process"},{"id":110,"unit":"総仕上げ","question":"導出問題で得点を安定させる最短手順を答えよ。","answer":"出発法則を書く→仮定・条件を書く→必要量を消去する→次元と極限で検算する。","essence":"式変形だけでなく「なぜその法則が使えるか」を言語化すると初見問題への転用力が上がる。","sourceRef":"2027補完：導出手順","kind":"process"}],"miniProblems":[{"id":1001,"unit":"力学","kind":"graph","title":"v-tグラフ：変位","stimulus":"ある物体の速度は、0〜2 sで0→4 m/s、2〜4 sで4 m/s一定、4〜6 sで4→0 m/sと変化した。","question":"0〜6 sの変位はいくらか。","choices":["12 m","16 m","20 m","24 m"],"correctIndex":1,"explanation":"v-tグラフの符号付き面積が変位。三角形4 m + 長方形8 m + 三角形4 m = 16 m…ではなく、最初と最後の三角形は各(1/2)×2×4=4 m、中央は2×4=8 mなので合計16 m。選択肢では16 mが正解。","graph":{"xLabel":"t [s]","yLabel":"v [m/s]","points":[[0,0],[2,4],[4,4],[6,0]]},"table":null,"tags":["傾き","面積","変位"],"kindLabel":"グラフ読解"},{"id":1002,"unit":"力学","kind":"graph","title":"x-tグラフ：速度","stimulus":"位置xと時刻tのグラフが直線で、t=1 sでx=2 m、t=5 sでx=10 mを通る。","question":"この区間の速度として最も適切なものはどれか。","choices":["0.5 m/s","2 m/s","4 m/s","8 m/s"],"correctIndex":1,"explanation":"x-tグラフの傾きが速度。Δx/Δt=(10-2)/(5-1)=2 m/s。","graph":{"xLabel":"t [s]","yLabel":"x [m]","points":[[1,2],[5,10]]},"table":null,"tags":["グラフ","傾き","速度"],"kindLabel":"グラフ読解"},{"id":1003,"unit":"力学","kind":"graph","title":"力-変位グラフ：仕事","stimulus":"物体に働く力Fが、x=0〜4 mで0 Nから8 Nまで直線的に増加する。","question":"この力がした仕事はいくらか。","choices":["8 J","16 J","24 J","32 J"],"correctIndex":1,"explanation":"F-xグラフの面積が仕事。三角形の面積は(1/2)×4×8=16 J。","graph":{"xLabel":"x [m]","yLabel":"F [N]","points":[[0,0],[4,8]]},"table":null,"tags":["仕事","面積"],"kindLabel":"グラフ読解"},{"id":1004,"unit":"力学","kind":"graph","title":"単振動：エネルギー","stimulus":"ばね振り子の変位xに対する弾性位置エネルギーUが、x=0で0、x=2 cmで2 Jとなる放物線で表される。","question":"x=1 cmでのUは何Jか。","choices":["0.25 J","0.5 J","1.0 J","1.5 J"],"correctIndex":1,"explanation":"弾性位置エネルギーはU∝x²。変位が1/2ならUは1/4。2 J×1/4=0.5 J。","graph":{"xLabel":"x [cm]","yLabel":"U [J]","points":[[-2,2],[-1,0.5],[0,0],[1,0.5],[2,2]]},"table":null,"tags":["単振動","比例関係"],"kindLabel":"グラフ読解"},{"id":1005,"unit":"力学","kind":"experiment","title":"台車実験：加速度","stimulus":"水平面上の台車を一定の合力で引き、台車の質量だけを変えて加速度を測定した。","question":"実験で確かめるべき関係として最も適切なものはどれか。","choices":["aはmに比例","aはm²に比例","aは1/mに比例","aはmに無関係"],"correctIndex":2,"explanation":"F=maより、合力F一定ならa=F/m。したがって加速度は質量に反比例する。","graph":null,"table":{"headers":["m [kg]","a [m/s²]"],"rows":[["0.50","4.0"],["1.00","2.0"],["2.00","1.0"]]},"tags":["運動方程式","実験"],"kindLabel":"実験考察"},{"id":1006,"unit":"力学","kind":"experiment","title":"摩擦係数の測定","stimulus":"水平面上の物体をばねばかりでゆっくり引き、滑り出す直前の力を測る。物体の質量は1.0 kg、滑り出す直前の値は3.0 N、g=10 m/s²とする。","question":"最大静止摩擦係数はいくらか。","choices":["0.03","0.3","3.0","30"],"correctIndex":1,"explanation":"水平面なのでN=mg=10 N。μs=Fmax/N=3.0/10=0.3。","graph":null,"table":null,"tags":["摩擦","測定"],"kindLabel":"実験考察"},{"id":1007,"unit":"力学","kind":"experiment","title":"斜面実験：エネルギー","stimulus":"同じ小球を、摩擦を無視できる2本の異なる形のレールで同じ高さhから静かに放した。終点は同じ高さ0にある。","question":"終点での速さについて正しいものはどれか。","choices":["急なレールの方が速い","緩いレールの方が速い","同じ","レールの長さだけでは決まらない"],"correctIndex":2,"explanation":"摩擦なしなら力学的エネルギー保存。速さは高さの差だけで決まり、経路には依存しない。","graph":null,"table":null,"tags":["エネルギー","経路"],"kindLabel":"実験考察"},{"id":1008,"unit":"力学","kind":"data","title":"衝突データ：運動量","stimulus":"一直線上で、0.20 kgの物体Aが+4.0 m/s、0.30 kgの物体Bが-1.0 m/sで衝突した。外力の力積は無視できる。","question":"衝突前の系の全運動量はいくらか。","choices":["+0.5 kg·m/s","+0.8 kg·m/s","+1.1 kg·m/s","-0.5 kg·m/s"],"correctIndex":0,"explanation":"p=0.20×4.0+0.30×(-1.0)=0.8-0.3=+0.5 kg·m/s。","graph":null,"table":null,"tags":["運動量","符号"],"kindLabel":"初見資料"},{"id":1009,"unit":"力学","kind":"data","title":"円運動：実験データ","stimulus":"同じ質量の小球を同じ半径で円運動させたところ、速さを2倍にすると必要な向心力はどう変化したか。","question":"理論上の変化として正しいものはどれか。","choices":["1/2倍","2倍","4倍","8倍"],"correctIndex":2,"explanation":"F=mv²/rなので、vを2倍にするとFは4倍。","graph":null,"table":null,"tags":["円運動","比例"],"kindLabel":"初見資料"},{"id":1010,"unit":"力学","kind":"data","title":"未知資料：人工衛星","stimulus":"同じ惑星の周囲を回る衛星A, Bがあり、軌道半径はBがAの4倍である。円軌道とみなす。","question":"Bの周期はAの何倍か。","choices":["2倍","4倍","8倍","16倍"],"correctIndex":2,"explanation":"ケプラー第3法則T²∝r³よりT∝r^(3/2)。4^(3/2)=8。","graph":null,"table":null,"tags":["ケプラー","資料"],"kindLabel":"初見資料"},{"id":1011,"unit":"熱力学","kind":"graph","title":"P-Vグラフ：仕事","stimulus":"気体がP=2.0×10^5 Pa一定で、体積1.0×10^-3 m³から3.0×10^-3 m³まで膨張した。","question":"気体がした仕事はいくらか。","choices":["200 J","400 J","600 J","800 J"],"correctIndex":1,"explanation":"W=PΔV=2.0×10^5×2.0×10^-3=400 J。","graph":{"xLabel":"V [10⁻³ m³]","yLabel":"P [10⁵ Pa]","points":[[1,2],[3,2]]},"table":null,"tags":["P-V","仕事"],"kindLabel":"グラフ読解"},{"id":1012,"unit":"熱力学","kind":"graph","title":"加熱曲線：相変化","stimulus":"一定出力で氷を加熱したとき、温度-時間グラフに温度が一定の区間が現れた。","question":"その区間で主に起こっていることはどれか。","choices":["分子の平均運動エネルギーだけが増える","相変化にエネルギーが使われる","熱が外部へ一切逃げない","比熱が0になる"],"correctIndex":1,"explanation":"相変化中は加えた熱が主に潜熱として状態変化に使われるため、温度が一定になり得る。","graph":{"xLabel":"time","yLabel":"temperature","points":[[0,-10],[2,0],[5,0],[8,30]]},"table":null,"tags":["潜熱","グラフ"],"kindLabel":"グラフ読解"},{"id":1013,"unit":"熱力学","kind":"graph","title":"断熱と等温","stimulus":"同じ状態点から体積を増加させる2本の曲線A, Bがあり、Aの方が圧力低下が急である。","question":"Aとして適切なのはどれか。","choices":["等温変化","断熱変化","定圧変化","定積変化"],"correctIndex":1,"explanation":"同じ点を通る理想気体の膨張では、断熱線の方が等温線より急に圧力が下がる。","graph":{"xLabel":"V","yLabel":"P","series":[{"name":"A","points":[[1,4],[2,1.5],[3,0.8]]},{"name":"B","points":[[1,4],[2,2],[3,1.33]]}]},"table":null,"tags":["断熱","等温"],"kindLabel":"グラフ読解"},{"id":1014,"unit":"熱力学","kind":"graph","title":"分子運動：温度","stimulus":"同じ気体について、温度T1とT2での分子の速さ分布を比較すると、T2の方が山が低く右へ広がっている。","question":"正しい関係はどれか。","choices":["T2<T1","T2=T1","T2>T1","情報不足"],"correctIndex":2,"explanation":"高温ほど速い分子の割合が増え、分布は右へ広がりピークが低くなる。","graph":null,"table":null,"tags":["分子運動","分布"],"kindLabel":"グラフ読解"},{"id":1015,"unit":"熱力学","kind":"experiment","title":"比熱測定","stimulus":"同じ電熱器で同じ時間だけ、同質量の物体A, Bを加熱した。温度上昇はAが20 K、Bが10 Kだった。熱損失は無視する。","question":"比熱の大小関係はどれか。","choices":["cA=2cB","cA=cB","cA=cB/2","比較不能"],"correctIndex":2,"explanation":"同じQ,mならΔT=Q/(mc)。温度上昇が2倍のAは比熱が1/2。","graph":null,"table":null,"tags":["比熱","実験"],"kindLabel":"実験考察"},{"id":1016,"unit":"熱力学","kind":"experiment","title":"ボイルの法則","stimulus":"一定温度で気体の体積Vと圧力Pを測定した。","question":"結果が理想気体の等温変化と整合するか確かめる最も直接的な量はどれか。","choices":["P+V","P-V","PV","P/V"],"correctIndex":2,"explanation":"等温で物質量一定ならPV=一定。","graph":null,"table":{"headers":["V [L]","P [kPa]"],"rows":[["1.0","200"],["2.0","100"],["4.0","50"]]},"tags":["状態方程式","実験"],"kindLabel":"実験考察"},{"id":1017,"unit":"熱力学","kind":"experiment","title":"断熱圧縮","stimulus":"自転車用ポンプを素早く圧縮すると、ゆっくり圧縮する場合より筒が温かくなった。","question":"最も適切な説明はどれか。","choices":["素早いほど気体が外へ多く仕事をする","短時間では熱が逃げにくく、外部からされた仕事が内部エネルギーを増やす","圧力が下がるから","気体の物質量が増えるから"],"correctIndex":1,"explanation":"急速圧縮は近似的に断熱。外部が気体に仕事をして内部エネルギーが増え、温度が上がる。","graph":null,"table":null,"tags":["断熱","日常"],"kindLabel":"実験考察"},{"id":1018,"unit":"熱力学","kind":"data","title":"熱平衡","stimulus":"20 ℃の水100 gと80 ℃の水100 gを混ぜる。熱損失を無視し、同じ比熱とする。","question":"平衡温度は何℃か。","choices":["30","40","50","60"],"correctIndex":2,"explanation":"質量・比熱が等しいので中間の50 ℃。熱収支でも確認できる。","graph":null,"table":null,"tags":["熱収支"],"kindLabel":"初見資料"},{"id":1019,"unit":"熱力学","kind":"data","title":"rms速度","stimulus":"同温度のHeとO2の分子運動を比べる。モル質量はHe=4, O2=32とする。","question":"二乗平均平方根速度の比 vHe/vO2 はどれか。","choices":["√2","2","2√2","8"],"correctIndex":2,"explanation":"v_rms∝1/√M。√(32/4)=√8=2√2。","graph":null,"table":null,"tags":["分子運動","資料"],"kindLabel":"初見資料"},{"id":1020,"unit":"熱力学","kind":"data","title":"熱機関","stimulus":"ある熱機関は高温熱源から500 Jを受け取り、低温熱源へ300 Jを放出した。","question":"熱効率はいくらか。","choices":["0.20","0.40","0.60","0.80"],"correctIndex":1,"explanation":"W=500-300=200 J、効率e=W/Qin=200/500=0.40。","graph":null,"table":null,"tags":["熱効率"],"kindLabel":"初見資料"},{"id":1021,"unit":"波動","kind":"graph","title":"波形：波長","stimulus":"ある時刻の波形で、連続する山の位置がx=1.0 mとx=3.5 mだった。","question":"波長はいくらか。","choices":["1.25 m","2.0 m","2.5 m","4.5 m"],"correctIndex":2,"explanation":"隣り合う同位相点（山-山）の距離が波長。3.5-1.0=2.5 m。","graph":null,"table":null,"tags":["波長","グラフ"],"kindLabel":"グラフ読解"},{"id":1022,"unit":"波動","kind":"graph","title":"定常波：節","stimulus":"長さ1.2 mの弦に、両端を含めて4つの節が等間隔にできている。","question":"この定常波の波長はいくらか。","choices":["0.4 m","0.8 m","1.2 m","2.4 m"],"correctIndex":1,"explanation":"節間隔はλ/2。両端含む4節なら区間は3つ、節間隔=1.2/3=0.4 m。よってλ=0.8 m。","graph":null,"table":null,"tags":["定常波","節"],"kindLabel":"グラフ読解"},{"id":1023,"unit":"波動","kind":"graph","title":"レンズ：像","stimulus":"凸レンズで物体距離aを変えたとき、aが焦点距離fに近づきつつa>fの範囲にある。","question":"実像の像距離bはどうなるか。","choices":["0に近づく","fに近づく","非常に大きくなる","常にaと等しい"],"correctIndex":2,"explanation":"1/a+1/b=1/f。a→f+ では1/b→0+なのでbは非常に大きくなる。","graph":null,"table":null,"tags":["レンズ","関係"],"kindLabel":"グラフ読解"},{"id":1024,"unit":"波動","kind":"graph","title":"干渉縞","stimulus":"ヤングの実験でスクリーン上の明線間隔Δxを測定した。スリット間隔dだけを2倍にした。","question":"他の条件一定ならΔxはどうなるか。","choices":["2倍","1/2倍","4倍","不変"],"correctIndex":1,"explanation":"Δx=Lλ/dなのでdを2倍にすると間隔は1/2。","graph":null,"table":null,"tags":["干渉","比例"],"kindLabel":"グラフ読解"},{"id":1025,"unit":"波動","kind":"experiment","title":"弦の振動","stimulus":"同じ弦で張力だけを4倍にして基本振動を起こした。","question":"基本振動数は何倍か。","choices":["1/2倍","2倍","4倍","16倍"],"correctIndex":1,"explanation":"f∝√Tなので4倍の張力で振動数は2倍。","graph":null,"table":null,"tags":["弦","実験"],"kindLabel":"実験考察"},{"id":1026,"unit":"波動","kind":"experiment","title":"音速の測定","stimulus":"共鳴管実験で、連続する共鳴位置の差が17 cmだった。","question":"波長はいくらか。","choices":["8.5 cm","17 cm","34 cm","68 cm"],"correctIndex":2,"explanation":"閉管の連続する共鳴長の差はλ/2。よってλ=34 cm。","graph":null,"table":null,"tags":["共鳴","測定"],"kindLabel":"実験考察"},{"id":1027,"unit":"波動","kind":"experiment","title":"屈折","stimulus":"空気から透明物質へ光を入れ、入射角30°、屈折角20°を得た。","question":"空気の屈折率を1としたとき、この物質の屈折率nに最も近いものはどれか。","choices":["0.68","1.0","1.46","2.92"],"correctIndex":2,"explanation":"スネルの法則 n≈sin30°/sin20°≈0.5/0.342≈1.46。","graph":null,"table":null,"tags":["屈折","実験"],"kindLabel":"実験考察"},{"id":1028,"unit":"波動","kind":"data","title":"ドップラー","stimulus":"静止観測者に向かって音源が近づく。音速340 m/s、音源速度20 m/s、音源振動数640 Hz。","question":"観測振動数に最も近いものはどれか。","choices":["602 Hz","640 Hz","680 Hz","720 Hz"],"correctIndex":2,"explanation":"f'=V/(V-vs) f =340/320×640=680 Hz。","graph":null,"table":null,"tags":["ドップラー","計算"],"kindLabel":"初見資料"},{"id":1029,"unit":"波動","kind":"data","title":"回折格子","stimulus":"回折格子で同じ次数mの明線を観測する。赤色光と青色光を比べる。","question":"一般に回折角が大きいのはどちらか。","choices":["青色光","赤色光","同じ","次数が同じなら観測不能"],"correctIndex":1,"explanation":"d sinθ=mλ。波長が長い赤色光ほどsinθが大きく、回折角も大きい。","graph":null,"table":null,"tags":["回折格子","資料"],"kindLabel":"初見資料"},{"id":1030,"unit":"波動","kind":"data","title":"初見資料：光ファイバー","stimulus":"コアの屈折率1.50、クラッドの屈折率1.45の光ファイバーを考える。","question":"コア内部で全反射を利用できる理由として最も適切なものはどれか。","choices":["外側の屈折率が大きいから","内側から外側へ進むとき高屈折率→低屈折率となるから","光速が真空より速くなるから","振動数が境界で変わるから"],"correctIndex":1,"explanation":"全反射には高屈折率側から低屈折率側への入射が必要。コア1.50>クラッド1.45。","graph":null,"table":null,"tags":["全反射","初見資料"],"kindLabel":"初見資料"},{"id":1031,"unit":"電磁気","kind":"graph","title":"V-Iグラフ：抵抗","stimulus":"抵抗器のV-Iグラフが原点を通る直線で、I=0.50 AのときV=6.0 Vである。","question":"抵抗値はいくらか。","choices":["3 Ω","6 Ω","12 Ω","24 Ω"],"correctIndex":2,"explanation":"V=IRよりR=V/I=6.0/0.50=12 Ω。","graph":{"xLabel":"I [A]","yLabel":"V [V]","points":[[0,0],[0.5,6]]},"table":null,"tags":["オーム","傾き"],"kindLabel":"グラフ読解"},{"id":1032,"unit":"電磁気","kind":"graph","title":"コンデンサー：Q-V","stimulus":"あるコンデンサーのQ-Vグラフは原点を通る直線で、V=4 VのときQ=12 μCである。","question":"電気容量はいくらか。","choices":["0.33 μF","3 μF","16 μF","48 μF"],"correctIndex":1,"explanation":"Q=CVよりC=Q/V=12 μC/4 V=3 μF。","graph":{"xLabel":"V [V]","yLabel":"Q [μC]","points":[[0,0],[4,12]]},"table":null,"tags":["コンデンサー","グラフ"],"kindLabel":"グラフ読解"},{"id":1033,"unit":"電磁気","kind":"graph","title":"磁束-時間","stimulus":"コイルを貫く磁束Φが0〜0.20 sで0.10 Wbから0.50 Wbまで直線的に増加した。巻数は1とする。","question":"誘導起電力の大きさはいくらか。","choices":["0.4 V","1.0 V","2.0 V","3.0 V"],"correctIndex":2,"explanation":"|E|=|ΔΦ/Δt|=(0.50-0.10)/0.20=2.0 V。","graph":{"xLabel":"t [s]","yLabel":"Φ [Wb]","points":[[0,0.1],[0.2,0.5]]},"table":null,"tags":["ファラデー","傾き"],"kindLabel":"グラフ読解"},{"id":1034,"unit":"電磁気","kind":"graph","title":"交流：周期","stimulus":"交流電圧のグラフで、正の最大値から次の正の最大値までの時間が0.020 sだった。","question":"周波数はいくらか。","choices":["20 Hz","50 Hz","100 Hz","200 Hz"],"correctIndex":1,"explanation":"周期T=0.020 sなのでf=1/T=50 Hz。","graph":null,"table":null,"tags":["交流","周期"],"kindLabel":"グラフ読解"},{"id":1035,"unit":"電磁気","kind":"experiment","title":"抵抗率","stimulus":"同じ材質・同じ太さの導線A, Bで、Bの長さはAの3倍である。温度は同じ。","question":"抵抗の比RB/RAはいくらか。","choices":["1/3","1","3","9"],"correctIndex":2,"explanation":"R=ρL/Sより、同材質・同断面積ならR∝L。","graph":null,"table":null,"tags":["抵抗率","実験"],"kindLabel":"実験考察"},{"id":1036,"unit":"電磁気","kind":"experiment","title":"磁場中の荷電粒子","stimulus":"同じ速度で同じ一様磁場に、陽子と質量が陽子の2倍・電荷が同じ正の粒子を垂直入射した。","question":"円軌道半径は後者が陽子の何倍か。","choices":["1/2","1","2","4"],"correctIndex":2,"explanation":"r=mv/(qB)。mだけ2倍ならrも2倍。","graph":null,"table":null,"tags":["ローレンツ力","実験"],"kindLabel":"実験考察"},{"id":1037,"unit":"電磁気","kind":"experiment","title":"電磁誘導","stimulus":"棒磁石のN極をコイルへ近づける実験を、同じ経路でより速く行った。","question":"誘導起電力の最大値は一般にどうなるか。","choices":["小さくなる","変わらない","大きくなる","必ず0になる"],"correctIndex":2,"explanation":"磁束変化量が同じでも、短い時間で変化させるほど|dΦ/dt|が大きくなり、誘導起電力も大きくなる。","graph":null,"table":null,"tags":["電磁誘導","実験"],"kindLabel":"実験考察"},{"id":1038,"unit":"電磁気","kind":"data","title":"合成抵抗","stimulus":"6 Ωと3 Ωの抵抗を並列接続した。","question":"合成抵抗はいくらか。","choices":["1 Ω","2 Ω","3 Ω","9 Ω"],"correctIndex":1,"explanation":"1/R=1/6+1/3=1/2よりR=2 Ω。","graph":null,"table":null,"tags":["回路"],"kindLabel":"初見資料"},{"id":1039,"unit":"電磁気","kind":"data","title":"電力","stimulus":"12 Vの電源に6 Ωの抵抗を接続した。","question":"抵抗で消費される電力はいくらか。","choices":["2 W","12 W","24 W","72 W"],"correctIndex":2,"explanation":"P=V²/R=144/6=24 W。","graph":null,"table":null,"tags":["電力"],"kindLabel":"初見資料"},{"id":1040,"unit":"電磁気","kind":"data","title":"初見資料：変圧器","stimulus":"理想変圧器で、一次コイル1000巻、二次コイル200巻、一次電圧100 Vとする。","question":"二次電圧はいくらか。","choices":["5 V","20 V","100 V","500 V"],"correctIndex":1,"explanation":"V2/V1=N2/N1=200/1000=0.2。よってV2=20 V。","graph":null,"table":null,"tags":["変圧器","資料"],"kindLabel":"初見資料"},{"id":1041,"unit":"原子","kind":"graph","title":"光電効果：停止電圧","stimulus":"光の振動数νを変えて停止電圧V0を測ると、V0-νグラフが直線になった。","question":"この直線の傾きに対応する量はどれか。","choices":["h/e","e/h","W/e","hc"],"correctIndex":0,"explanation":"eV0=hν-WよりV0=(h/e)ν-W/e。傾きはh/e。","graph":null,"table":null,"tags":["光電効果","グラフ"],"kindLabel":"グラフ読解"},{"id":1042,"unit":"原子","kind":"graph","title":"放射性崩壊","stimulus":"未崩壊核数Nが、0 hで800、2 hで400、4 hで200となった。","question":"半減期はいくらか。","choices":["1 h","2 h","4 h","8 h"],"correctIndex":1,"explanation":"2時間ごとに半分になっているので半減期は2 h。","graph":{"xLabel":"t [h]","yLabel":"N","points":[[0,800],[2,400],[4,200],[6,100]]},"table":null,"tags":["半減期","グラフ"],"kindLabel":"グラフ読解"},{"id":1043,"unit":"原子","kind":"graph","title":"X線：最短波長","stimulus":"X線管の加速電圧Vを大きくすると、連続X線の最短波長λminはどう変化するか。","question":"最も適切なものはどれか。","choices":["長くなる","短くなる","変わらない","0になる"],"correctIndex":1,"explanation":"最大光子エネルギーeV=hc/λmin。Vを大きくするとλminは短くなる。","graph":null,"table":null,"tags":["X線","関係"],"kindLabel":"グラフ読解"},{"id":1044,"unit":"原子","kind":"graph","title":"結合エネルギー曲線","stimulus":"1核子あたり結合エネルギーは、軽い核から中程度の核へ向かって増加し、鉄付近で大きくなる。","question":"この資料から説明しやすい現象はどれか。","choices":["軽い核の融合でエネルギー放出","どんな核分裂でも必ず吸熱","電子の光電効果","気体の断熱膨張"],"correctIndex":0,"explanation":"軽い核が融合して1核子あたり結合エネルギーが増える反応では、質量差がエネルギーとして放出される。","graph":null,"table":null,"tags":["結合エネルギー","資料"],"kindLabel":"グラフ読解"},{"id":1045,"unit":"原子","kind":"experiment","title":"光電効果：強度","stimulus":"同じ振動数の光を金属に当て、光の強度だけを2倍にした。振動数はしきい値より十分高い。","question":"理想化したとき主に変化するものはどれか。","choices":["最大運動エネルギーが2倍","停止電圧が2倍","単位時間あたりの光電子数が増える","仕事関数が小さくなる"],"correctIndex":2,"explanation":"強度は主に光子数に対応する。1光子のエネルギーhνは変わらないため、最大運動エネルギーは変わらない。","graph":null,"table":null,"tags":["光電効果","実験"],"kindLabel":"実験考察"},{"id":1046,"unit":"原子","kind":"experiment","title":"電子線回折","stimulus":"電子を結晶へ当てると回折パターンが観測された。","question":"この結果が直接支持する性質はどれか。","choices":["電子の波動性","電子が電荷をもたないこと","電子の質量が0であること","電子が原子核内だけに存在すること"],"correctIndex":0,"explanation":"回折は波の代表的性質であり、電子の物質波を支持する。","graph":null,"table":null,"tags":["物質波","実験"],"kindLabel":"実験考察"},{"id":1047,"unit":"原子","kind":"experiment","title":"スペクトル","stimulus":"低圧気体を放電させると、特定の波長だけが明るい線として観測された。","question":"最も適切な説明はどれか。","choices":["電子のエネルギー準位が連続だから","電子のエネルギー準位が離散的だから","光速が気体中で0になるから","原子核が必ず分裂するから"],"correctIndex":1,"explanation":"離散的な準位間遷移のエネルギー差に対応する光だけが放出されるため線スペクトルになる。","graph":null,"table":null,"tags":["スペクトル","実験"],"kindLabel":"実験考察"},{"id":1048,"unit":"原子","kind":"data","title":"光子エネルギー","stimulus":"波長400 nmと800 nmの光子を比較する。","question":"1光子あたりのエネルギーの比 E400/E800 はいくらか。","choices":["1/2","1","2","4"],"correctIndex":2,"explanation":"E=hc/λなので波長に反比例。800/400=2。","graph":null,"table":null,"tags":["光子","比例"],"kindLabel":"初見資料"},{"id":1049,"unit":"原子","kind":"data","title":"β崩壊","stimulus":"ある核種がβ⁻崩壊した。崩壊前の原子番号Z=6、質量数A=14だった。","question":"娘核の(Z,A)はどれか。","choices":["(5,14)","(6,13)","(7,14)","(7,15)"],"correctIndex":2,"explanation":"β⁻崩壊ではZが1増え、Aは変わらない。","graph":null,"table":null,"tags":["β崩壊"],"kindLabel":"初見資料"},{"id":1050,"unit":"原子","kind":"data","title":"初見資料：半減期利用","stimulus":"ある放射性同位体の半減期は5日。初めに1600個あった未崩壊核は15日後に何個か。","question":"最も適切なものはどれか。","choices":["100","200","400","800"],"correctIndex":1,"explanation":"15日は3半減期。1600→800→400→200。","graph":null,"table":null,"tags":["半減期","資料"],"kindLabel":"初見資料"}],"dailyTasks":[{"day":1,"unit":"力学","coreQuestionIDs":[1,2,3,4,5,6,7],"miniProblemIDs":[1001,1002,1003],"isUnitReviewDay":false},{"day":2,"unit":"力学","coreQuestionIDs":[8,9,10,11,12,13,14],"miniProblemIDs":[1004,1005,1006],"isUnitReviewDay":false},{"day":3,"unit":"力学","coreQuestionIDs":[15,16,17,18,19,20,1],"miniProblemIDs":[1007,1008,1009],"isUnitReviewDay":false},{"day":4,"unit":"力学","coreQuestionIDs":[2,3,4,5,6,7,8],"miniProblemIDs":[1010,1001,1002],"isUnitReviewDay":false},{"day":5,"unit":"力学","coreQuestionIDs":[9,10,11,12,13,14,15],"miniProblemIDs":[1003,1004,1005],"isUnitReviewDay":false},{"day":6,"unit":"力学","coreQuestionIDs":[16,17,18,19,20,1,2],"miniProblemIDs":[1006,1007,1008],"isUnitReviewDay":false},{"day":7,"unit":"力学","coreQuestionIDs":[3,4,5,6,7,8,9],"miniProblemIDs":[1009,1010,1001],"isUnitReviewDay":false},{"day":8,"unit":"力学","coreQuestionIDs":[10,11,12,13,14,15,16],"miniProblemIDs":[1002,1003,1004],"isUnitReviewDay":false},{"day":9,"unit":"力学","coreQuestionIDs":[17,18,19,20,1,2,3],"miniProblemIDs":[1005,1006,1007],"isUnitReviewDay":false},{"day":10,"unit":"力学","coreQuestionIDs":[4,5,6,7,8,9,10],"miniProblemIDs":[1008,1009,1010],"isUnitReviewDay":false},{"day":11,"unit":"力学","coreQuestionIDs":[11,12,13,14,15,16,17],"miniProblemIDs":[1001,1002,1003],"isUnitReviewDay":false},{"day":12,"unit":"力学","coreQuestionIDs":[18,19,20,1,2,3,4],"miniProblemIDs":[1004,1005,1006],"isUnitReviewDay":false},{"day":13,"unit":"力学","coreQuestionIDs":[5,6,7,8,9,10,11],"miniProblemIDs":[1007,1008,1009],"isUnitReviewDay":false},{"day":14,"unit":"力学","coreQuestionIDs":[12,13,14,15,16,17,18],"miniProblemIDs":[1010,1001,1002],"isUnitReviewDay":false},{"day":15,"unit":"力学","coreQuestionIDs":[19,20,1,2,3,4,5],"miniProblemIDs":[1003,1004,1005],"isUnitReviewDay":false},{"day":16,"unit":"力学","coreQuestionIDs":[6,7,8,9,10,11,12],"miniProblemIDs":[1006,1007,1008],"isUnitReviewDay":false},{"day":17,"unit":"力学","coreQuestionIDs":[13,14,15,16,17,18,19],"miniProblemIDs":[1009,1010,1001],"isUnitReviewDay":false},{"day":18,"unit":"力学","coreQuestionIDs":[20,1,2,3,4,5,6],"miniProblemIDs":[1002,1003,1004],"isUnitReviewDay":false},{"day":19,"unit":"力学","coreQuestionIDs":[7,8,9,10,11,12,13],"miniProblemIDs":[1005,1006,1007],"isUnitReviewDay":false},{"day":20,"unit":"力学","coreQuestionIDs":[14,15,16,17,18,19,20],"miniProblemIDs":[1008,1009,1010],"isUnitReviewDay":false},{"day":21,"unit":"力学","coreQuestionIDs":[1,2,3,4,5,6,7],"miniProblemIDs":[1001,1002,1003],"isUnitReviewDay":false},{"day":22,"unit":"力学","coreQuestionIDs":[8,9,10,11,12,13,14],"miniProblemIDs":[1004,1005,1006],"isUnitReviewDay":false},{"day":23,"unit":"力学","coreQuestionIDs":[15,16,17,18,19,20,1],"miniProblemIDs":[1007,1008,1009],"isUnitReviewDay":false},{"day":24,"unit":"力学","coreQuestionIDs":[2,3,4,5,6,7,8],"miniProblemIDs":[1010,1001,1002],"isUnitReviewDay":false},{"day":25,"unit":"力学","coreQuestionIDs":[9,10,11,12,13,14,15],"miniProblemIDs":[1003,1004,1005],"isUnitReviewDay":true},{"day":26,"unit":"熱力学","coreQuestionIDs":[21,22,23,24,25,26,27],"miniProblemIDs":[1011,1012,1013],"isUnitReviewDay":false},{"day":27,"unit":"熱力学","coreQuestionIDs":[28,29,30,31,32,33,34],"miniProblemIDs":[1014,1015,1016],"isUnitReviewDay":false},{"day":28,"unit":"熱力学","coreQuestionIDs":[35,36,37,38,39,40,21],"miniProblemIDs":[1017,1018,1019],"isUnitReviewDay":false},{"day":29,"unit":"熱力学","coreQuestionIDs":[22,23,24,25,26,27,28],"miniProblemIDs":[1020,1011,1012],"isUnitReviewDay":false},{"day":30,"unit":"熱力学","coreQuestionIDs":[29,30,31,32,33,34,35],"miniProblemIDs":[1013,1014,1015],"isUnitReviewDay":false},{"day":31,"unit":"熱力学","coreQuestionIDs":[36,37,38,39,40,21,22],"miniProblemIDs":[1016,1017,1018],"isUnitReviewDay":false},{"day":32,"unit":"熱力学","coreQuestionIDs":[23,24,25,26,27,28,29],"miniProblemIDs":[1019,1020,1011],"isUnitReviewDay":false},{"day":33,"unit":"熱力学","coreQuestionIDs":[30,31,32,33,34,35,36],"miniProblemIDs":[1012,1013,1014],"isUnitReviewDay":false},{"day":34,"unit":"熱力学","coreQuestionIDs":[37,38,39,40,21,22,23],"miniProblemIDs":[1015,1016,1017],"isUnitReviewDay":false},{"day":35,"unit":"熱力学","coreQuestionIDs":[24,25,26,27,28,29,30],"miniProblemIDs":[1018,1019,1020],"isUnitReviewDay":false},{"day":36,"unit":"熱力学","coreQuestionIDs":[31,32,33,34,35,36,37],"miniProblemIDs":[1011,1012,1013],"isUnitReviewDay":false},{"day":37,"unit":"熱力学","coreQuestionIDs":[38,39,40,21,22,23,24],"miniProblemIDs":[1014,1015,1016],"isUnitReviewDay":false},{"day":38,"unit":"熱力学","coreQuestionIDs":[25,26,27,28,29,30,31],"miniProblemIDs":[1017,1018,1019],"isUnitReviewDay":false},{"day":39,"unit":"熱力学","coreQuestionIDs":[32,33,34,35,36,37,38],"miniProblemIDs":[1020,1011,1012],"isUnitReviewDay":false},{"day":40,"unit":"熱力学","coreQuestionIDs":[39,40,21,22,23,24,25],"miniProblemIDs":[1013,1014,1015],"isUnitReviewDay":true},{"day":41,"unit":"波動","coreQuestionIDs":[41,42,43,44,45,46,47],"miniProblemIDs":[1021,1022,1023],"isUnitReviewDay":false},{"day":42,"unit":"波動","coreQuestionIDs":[48,49,50,51,52,53,54],"miniProblemIDs":[1024,1025,1026],"isUnitReviewDay":false},{"day":43,"unit":"波動","coreQuestionIDs":[55,56,57,58,59,60,41],"miniProblemIDs":[1027,1028,1029],"isUnitReviewDay":false},{"day":44,"unit":"波動","coreQuestionIDs":[42,43,44,45,46,47,48],"miniProblemIDs":[1030,1021,1022],"isUnitReviewDay":false},{"day":45,"unit":"波動","coreQuestionIDs":[49,50,51,52,53,54,55],"miniProblemIDs":[1023,1024,1025],"isUnitReviewDay":false},{"day":46,"unit":"波動","coreQuestionIDs":[56,57,58,59,60,41,42],"miniProblemIDs":[1026,1027,1028],"isUnitReviewDay":false},{"day":47,"unit":"波動","coreQuestionIDs":[43,44,45,46,47,48,49],"miniProblemIDs":[1029,1030,1021],"isUnitReviewDay":false},{"day":48,"unit":"波動","coreQuestionIDs":[50,51,52,53,54,55,56],"miniProblemIDs":[1022,1023,1024],"isUnitReviewDay":false},{"day":49,"unit":"波動","coreQuestionIDs":[57,58,59,60,41,42,43],"miniProblemIDs":[1025,1026,1027],"isUnitReviewDay":false},{"day":50,"unit":"波動","coreQuestionIDs":[44,45,46,47,48,49,50],"miniProblemIDs":[1028,1029,1030],"isUnitReviewDay":false},{"day":51,"unit":"波動","coreQuestionIDs":[51,52,53,54,55,56,57],"miniProblemIDs":[1021,1022,1023],"isUnitReviewDay":false},{"day":52,"unit":"波動","coreQuestionIDs":[58,59,60,41,42,43,44],"miniProblemIDs":[1024,1025,1026],"isUnitReviewDay":false},{"day":53,"unit":"波動","coreQuestionIDs":[45,46,47,48,49,50,51],"miniProblemIDs":[1027,1028,1029],"isUnitReviewDay":false},{"day":54,"unit":"波動","coreQuestionIDs":[52,53,54,55,56,57,58],"miniProblemIDs":[1030,1021,1022],"isUnitReviewDay":false},{"day":55,"unit":"波動","coreQuestionIDs":[59,60,41,42,43,44,45],"miniProblemIDs":[1023,1024,1025],"isUnitReviewDay":true},{"day":56,"unit":"電磁気","coreQuestionIDs":[61,62,63,64,65,66,67],"miniProblemIDs":[1031,1032,1033],"isUnitReviewDay":false},{"day":57,"unit":"電磁気","coreQuestionIDs":[68,69,70,71,72,73,74],"miniProblemIDs":[1034,1035,1036],"isUnitReviewDay":false},{"day":58,"unit":"電磁気","coreQuestionIDs":[75,76,77,78,79,80,81],"miniProblemIDs":[1037,1038,1039],"isUnitReviewDay":false},{"day":59,"unit":"電磁気","coreQuestionIDs":[82,83,84,85,61,62,63],"miniProblemIDs":[1040,1031,1032],"isUnitReviewDay":false},{"day":60,"unit":"電磁気","coreQuestionIDs":[64,65,66,67,68,69,70],"miniProblemIDs":[1033,1034,1035],"isUnitReviewDay":false},{"day":61,"unit":"電磁気","coreQuestionIDs":[71,72,73,74,75,76,77],"miniProblemIDs":[1036,1037,1038],"isUnitReviewDay":false},{"day":62,"unit":"電磁気","coreQuestionIDs":[78,79,80,81,82,83,84],"miniProblemIDs":[1039,1040,1031],"isUnitReviewDay":false},{"day":63,"unit":"電磁気","coreQuestionIDs":[85,61,62,63,64,65,66],"miniProblemIDs":[1032,1033,1034],"isUnitReviewDay":false},{"day":64,"unit":"電磁気","coreQuestionIDs":[67,68,69,70,71,72,73],"miniProblemIDs":[1035,1036,1037],"isUnitReviewDay":false},{"day":65,"unit":"電磁気","coreQuestionIDs":[74,75,76,77,78,79,80],"miniProblemIDs":[1038,1039,1040],"isUnitReviewDay":false},{"day":66,"unit":"電磁気","coreQuestionIDs":[81,82,83,84,85,61,62],"miniProblemIDs":[1031,1032,1033],"isUnitReviewDay":false},{"day":67,"unit":"電磁気","coreQuestionIDs":[63,64,65,66,67,68,69],"miniProblemIDs":[1034,1035,1036],"isUnitReviewDay":false},{"day":68,"unit":"電磁気","coreQuestionIDs":[70,71,72,73,74,75,76],"miniProblemIDs":[1037,1038,1039],"isUnitReviewDay":false},{"day":69,"unit":"電磁気","coreQuestionIDs":[77,78,79,80,81,82,83],"miniProblemIDs":[1040,1031,1032],"isUnitReviewDay":false},{"day":70,"unit":"電磁気","coreQuestionIDs":[84,85,61,62,63,64,65],"miniProblemIDs":[1033,1034,1035],"isUnitReviewDay":false},{"day":71,"unit":"電磁気","coreQuestionIDs":[66,67,68,69,70,71,72],"miniProblemIDs":[1036,1037,1038],"isUnitReviewDay":false},{"day":72,"unit":"電磁気","coreQuestionIDs":[73,74,75,76,77,78,79],"miniProblemIDs":[1039,1040,1031],"isUnitReviewDay":false},{"day":73,"unit":"電磁気","coreQuestionIDs":[80,81,82,83,84,85,61],"miniProblemIDs":[1032,1033,1034],"isUnitReviewDay":false},{"day":74,"unit":"電磁気","coreQuestionIDs":[62,63,64,65,66,67,68],"miniProblemIDs":[1035,1036,1037],"isUnitReviewDay":false},{"day":75,"unit":"電磁気","coreQuestionIDs":[69,70,71,72,73,74,75],"miniProblemIDs":[1038,1039,1040],"isUnitReviewDay":true},{"day":76,"unit":"原子","coreQuestionIDs":[86,87,88,89,90,91,92],"miniProblemIDs":[1041,1042,1043],"isUnitReviewDay":false},{"day":77,"unit":"原子","coreQuestionIDs":[93,94,95,96,97,98,99],"miniProblemIDs":[1044,1045,1046],"isUnitReviewDay":false},{"day":78,"unit":"原子","coreQuestionIDs":[100,101,102,103,104,105,86],"miniProblemIDs":[1047,1048,1049],"isUnitReviewDay":false},{"day":79,"unit":"原子","coreQuestionIDs":[87,88,89,90,91,92,93],"miniProblemIDs":[1050,1041,1042],"isUnitReviewDay":false},{"day":80,"unit":"原子","coreQuestionIDs":[94,95,96,97,98,99,100],"miniProblemIDs":[1043,1044,1045],"isUnitReviewDay":false},{"day":81,"unit":"原子","coreQuestionIDs":[101,102,103,104,105,86,87],"miniProblemIDs":[1046,1047,1048],"isUnitReviewDay":false},{"day":82,"unit":"原子","coreQuestionIDs":[88,89,90,91,92,93,94],"miniProblemIDs":[1049,1050,1041],"isUnitReviewDay":false},{"day":83,"unit":"原子","coreQuestionIDs":[95,96,97,98,99,100,101],"miniProblemIDs":[1042,1043,1044],"isUnitReviewDay":false},{"day":84,"unit":"原子","coreQuestionIDs":[102,103,104,105,86,87,88],"miniProblemIDs":[1045,1046,1047],"isUnitReviewDay":false},{"day":85,"unit":"原子","coreQuestionIDs":[89,90,91,92,93,94,95],"miniProblemIDs":[1048,1049,1050],"isUnitReviewDay":true},{"day":86,"unit":"総仕上げ","coreQuestionIDs":[106,107,108,109,110,38,12],"miniProblemIDs":[1008,1043,1014],"isUnitReviewDay":false},{"day":87,"unit":"総仕上げ","coreQuestionIDs":[106,107,108,109,110,24,70],"miniProblemIDs":[1007,1027,1020],"isUnitReviewDay":false},{"day":88,"unit":"総仕上げ","coreQuestionIDs":[106,107,108,109,110,102,68],"miniProblemIDs":[1034,1002,1006],"isUnitReviewDay":false},{"day":89,"unit":"総仕上げ","coreQuestionIDs":[106,107,108,109,110,28,22],"miniProblemIDs":[1035,1046,1021],"isUnitReviewDay":false},{"day":90,"unit":"総仕上げ","coreQuestionIDs":[106,107,108,109,110,1,28],"miniProblemIDs":[1044,1047,1050],"isUnitReviewDay":false}],"reviewTests":[{"id":"力学-review","unit":"力学","unlockDay":25,"questionCount":20,"coreQuestionIDs":[9,18,19,3,14,4,5,10,16,13,15,17],"miniProblemIDs":[1001,1008,1003,1005,1009,1004,1010,1002]},{"id":"熱力学-review","unit":"熱力学","unlockDay":40,"questionCount":20,"coreQuestionIDs":[30,22,35,32,38,24,26,23,37,29,40,33],"miniProblemIDs":[1018,1017,1011,1016,1020,1014,1012,1015]},{"id":"波動-review","unit":"波動","unlockDay":55,"questionCount":20,"coreQuestionIDs":[48,58,54,43,50,60,44,53,49,59,55,52],"miniProblemIDs":[1022,1026,1023,1021,1030,1024,1027,1029]},{"id":"電磁気-review","unit":"電磁気","unlockDay":75,"questionCount":20,"coreQuestionIDs":[75,73,62,67,79,71,66,69,77,72,78,82],"miniProblemIDs":[1039,1034,1033,1040,1032,1031,1037,1038]},{"id":"原子-review","unit":"原子","unlockDay":85,"questionCount":20,"coreQuestionIDs":[87,93,91,98,95,100,97,105,99,94,102,103],"miniProblemIDs":[1049,1045,1041,1042,1043,1047,1044,1048]}],"reviewIntervalsDays":[1,3,7,14]};
+const STORE_KEY = "physicsEssence90.progress.v2";
+let DB = null;
+let state = null;
+let currentTab = "home";
+let studySession = null;
+let activeTest = null;
+
+const $ = s => document.querySelector(s);
+const main = () => $("#main");
+
+function defaultState(){
+  return {
+    version: APP_VERSION,
+    completedDays: [],
+    ratings: {},
+    miniResults: {},
+    testScores: {},
+    reviewQueue: [],
+    reviewHistory: [],
+    theme: "system",
+    startDate: new Date().toISOString().slice(0,10),
+    currentDay: 1
+  };
+}
+let memoryStore = null;
+function loadState(){
+  try{
+    const raw = localStorage.getItem(STORE_KEY);
+    const parsed = raw ? JSON.parse(raw) : null;
+    state = Object.assign(defaultState(), parsed || {});
+  }catch(e){
+    state = Object.assign(defaultState(), memoryStore || {});
+  }
+  applyTheme();
+}
+function saveState(){
+  memoryStore = state;
+  try{ localStorage.setItem(STORE_KEY, JSON.stringify(state)); }catch(e){}
+  updateBadge();
+}
+
+function applyTheme(){
+  let t = state?.theme || "system";
+  if(t==="system") t = matchMedia("(prefers-color-scheme:dark)").matches ? "dark" : "light";
+  document.documentElement.dataset.theme = t;
+}
+function toast(msg){
+  const el=$("#toast"); el.textContent=msg; el.classList.add("show");
+  setTimeout(()=>el.classList.remove("show"),1800);
+}
+function todayISO(){ return new Date().toISOString().slice(0,10); }
+function addDays(iso,n){
+  const d=new Date(iso+"T12:00:00"); d.setDate(d.getDate()+n); return d.toISOString().slice(0,10);
+}
+function isDue(item){ return item.dueDate <= todayISO(); }
+function dueReviews(){ return state.reviewQueue.filter(isDue); }
+function updateBadge(){
+  const n=dueReviews().length, b=$("#reviewBadge");
+  if(!b) return;
+  b.textContent=n; b.classList.toggle("hidden", n===0);
+}
+function escapeHTML(s=""){return s.replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]));}
+
+function renderMathText(text=""){
+  // Lightweight renderer for the formula subset used in this app; avoids MathJax/KaTeX payload.
+  let s = escapeHTML(text);
+  s = s.replace(/\\\\\((.*?)\\\\\)/gs, (_,m)=>`<span class="math">${mathInner(m)}</span>`);
+  return s.replace(/\n/g,"<br>");
+}
+function mathInner(m){
+  let s=m;
+  const greek={alpha:"α",beta:"β",gamma:"γ",Delta:"Δ",delta:"δ",lambda:"λ",mu:"μ",nu:"ν",rho:"ρ",omega:"ω",pi:"π",theta:"θ",Phi:"Φ",phi:"φ",varepsilon:"ε",sum:"Σ",int:"∫",cdot:"·",times:"×",approx:"≈",le:"≤",ge:"≥",infty:"∞",quad:"  "};
+  s=s.replace(/\\([A-Za-z]+)/g,(a,k)=>greek[k]??({"sqrt":"√","vec":"","dfrac":"\\dfrac","frac":"\\frac","text":""}[k]??k));
+  // fractions, repeated a few times for nested simple cases
+  for(let i=0;i<4;i++){
+    s=s.replace(/\\(?:d?frac)\{([^{}]*)\}\{([^{}]*)\}/g,'<span class="frac"><span>$1</span><span>$2</span></span>');
+  }
+  s=s.replace(/√\{([^{}]*)\}/g,'<span class="sqrt">√($1)</span>');
+  s=s.replace(/\^\{([^{}]*)\}/g,'<span class="sup">$1</span>').replace(/\^([A-Za-z0-9+\-]+)/g,'<span class="sup">$1</span>');
+  s=s.replace(/_\{([^{}]*)\}/g,'<span class="sub">$1</span>').replace(/_([A-Za-z0-9]+)/g,'<span class="sub">$1</span>');
+  s=s.replace(/[{}]/g,"");
+  s=s.replace(/\\,/g," ").replace(/\\/g,"");
+  return s;
+}
+
+function coreById(id){ return DB.coreQuestions.find(q=>q.id===id); }
+function miniById(id){ return DB.miniProblems.find(q=>q.id===id); }
+function dayData(day){ return DB.dailyTasks.find(d=>d.day===day); }
+function unitColorClass(unit){ return unit==="総仕上げ"?"blue":""; }
+
+function setTab(tab){
+  currentTab=tab;
+  document.querySelectorAll(".tab").forEach(b=>b.classList.toggle("active",b.dataset.tab===tab));
+  if(tab==="home") renderHome();
+  if(tab==="study") renderStudyLanding();
+  if(tab==="review") renderReview();
+  if(tab==="tests") renderTests();
+  if(tab==="settings") renderSettings();
+  scrollTo({top:0,behavior:"instant"});
+}
+function nextIncompleteDay(){
+  for(let d=1;d<=90;d++) if(!state.completedDays.includes(d)) return d;
+  return 90;
+}
+function completedPct(){ return Math.round(state.completedDays.length/90*100); }
+
+function renderHome(){
+  const next=nextIncompleteDay();
+  state.currentDay=next; saveState();
+  const unit=dayData(next)?.unit || "総仕上げ";
+  const pct=completedPct();
+  main().innerHTML=`
+    <section class="hero">
+      <div class="hero-grid">
+        <div>
+          <div class="pill blue">${escapeHTML(unit)} · Day ${next}</div>
+          <div style="margin-top:14px" class="big-number">${state.completedDays.length}<span style="font-size:18px;color:var(--muted)"> / 90日</span></div>
+          <div class="muted" style="margin-top:8px">本質7問 + 共通テスト型3問</div>
+        </div>
+        <div class="progress-ring" style="--pct:${pct}%"><strong>${pct}%</strong></div>
+      </div>
+      <div class="actions">
+        <button class="primary" id="continueBtn">Day ${next} を始める</button>
+        <button class="secondary" id="dueBtn">期限復習 ${dueReviews().length}問</button>
+      </div>
+    </section>
+
+    <div class="kpi" style="margin-top:14px">
+      <div class="card"><strong>${Object.keys(state.ratings).length}</strong><small>本質カード</small></div>
+      <div class="card"><strong>${Object.values(state.miniResults).filter(x=>x.correct).length}</strong><small>ミニ正解</small></div>
+      <div class="card"><strong>${Object.keys(state.testScores).length}</strong><small>単元テスト</small></div>
+    </div>
+
+    <div class="section-title"><h2>90日カレンダー</h2><small>タップで開く</small></div>
+    <div class="calendar">
+      ${DB.dailyTasks.map(d=>{
+        const done=state.completedDays.includes(d.day), cur=d.day===next;
+        return `<button class="day ${done?"done":""} ${cur?"current":""}" data-day="${d.day}">
+          ${d.day}${d.isUnitReviewDay?'<i class="dot"></i>':""}
+        </button>`;
+      }).join("")}
+    </div>
+
+    <div class="section-title"><h2>今日の狙い</h2></div>
+    <div class="notice">
+      公式の暗記だけでなく、<b>グラフの傾き・面積、実験条件、初見資料から本質情報を抽出する力</b>を毎日3問ずつ鍛えます。
+    </div>`;
+  $("#continueBtn").onclick=()=>startDay(next);
+  $("#dueBtn").onclick=()=>setTab("review");
+  document.querySelectorAll("[data-day]").forEach(b=>b.onclick=()=>startDay(+b.dataset.day));
+}
+
+function renderStudyLanding(){
+  const next=nextIncompleteDay();
+  main().innerHTML=`
+    <div class="section-title"><h2>学習</h2><small>90日 × 10問</small></div>
+    <div class="card stack">
+      <div class="between row"><div><strong>次の学習</strong><div class="muted">Day ${next} · ${dayData(next).unit}</div></div><button class="primary" id="goNext">開始</button></div>
+    </div>
+    <div class="section-title"><h2>単元</h2></div>
+    <div class="stack">
+      ${["力学","熱力学","波動","電磁気","原子","総仕上げ"].map(u=>{
+        const ds=DB.dailyTasks.filter(d=>d.unit===u);
+        const done=ds.filter(d=>state.completedDays.includes(d.day)).length;
+        return `<div class="card row between"><div><strong>${u}</strong><div class="muted">${done}/${ds.length}日</div></div><button class="secondary" data-unit="${u}">開く</button></div>`;
+      }).join("")}
+    </div>`;
+  $("#goNext").onclick=()=>startDay(next);
+  document.querySelectorAll("[data-unit]").forEach(b=>b.onclick=()=>{
+    const d=DB.dailyTasks.find(x=>x.unit===b.dataset.unit && !state.completedDays.includes(x.day)) || DB.dailyTasks.find(x=>x.unit===b.dataset.unit);
+    startDay(d.day);
+  });
+}
+
+function startDay(day){
+  const d=dayData(day);
+  const items=[
+    ...d.coreQuestionIDs.map(id=>({type:"core",id})),
+    ...d.miniProblemIDs.map(id=>({type:"mini",id}))
+  ];
+  // Interleave: 2 core, 1 mini pattern.
+  const c=items.filter(x=>x.type==="core"), m=items.filter(x=>x.type==="mini");
+  const mixed=[];
+  for(let i=0;i<7;i++){ mixed.push(c[i]); if([1,3,5].includes(i) && m.length) mixed.push(m.shift()); }
+  mixed.push(...m);
+  studySession={day,index:0,items:mixed,answered:false};
+  renderStudyItem();
+  currentTab="study"; document.querySelectorAll(".tab").forEach(b=>b.classList.toggle("active",b.dataset.tab==="study"));
+}
+function renderStudyItem(){
+  const s=studySession, item=s.items[s.index], d=dayData(s.day);
+  const pos=s.index+1, total=s.items.length;
+  main().innerHTML=`
+    <div class="study-head">
+      <div><div class="pill">${d.unit}</div><strong style="margin-left:8px">Day ${s.day}</strong></div>
+      <small class="muted">${pos}/${total}</small>
+    </div>
+    <div class="study-progress"><i style="--w:${Math.round(pos/total*100)}%"></i></div>
+    <div id="itemHost"></div>
+    <div class="actions"><button class="ghost" id="exitStudy">終了</button></div>`;
+  $("#exitStudy").onclick=()=>setTab("home");
+  if(item.type==="core") renderCoreItem(coreById(item.id));
+  else renderMiniItem(miniById(item.id));
+}
+function renderCoreItem(q){
+  $("#itemHost").innerHTML=`
+    <div class="flip-wrap">
+      <div class="flip" id="flip">
+        <section class="face front">
+          <div class="between row"><span class="pill blue">本質カード</span><span class="pill">${q.kind}</span></div>
+          <div class="qtext">${renderMathText(q.question)}</div>
+          <div class="hint">頭の中で「条件 → 出発式 → 結論」の順に説明してから裏返す。</div>
+          <button class="primary" id="flipBtn">答えを見る</button>
+        </section>
+        <section class="face back">
+          <div class="pill blue">ANSWER</div>
+          <div class="answer">${renderMathText(q.answer)}</div>
+          <div class="essence"><b>ESSENCE</b><br>${renderMathText(q.essence)}</div>
+          <div style="margin-top:auto">
+            <div class="muted" style="font-size:12px;margin-bottom:8px">理解度を記録</div>
+            <div class="rating">
+              <button class="weak" data-rate="again">もう一度</button>
+              <button data-rate="hard">迷った</button>
+              <button class="ok" data-rate="good">理解</button>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>`;
+  $("#flipBtn").onclick=()=>$("#flip").classList.add("flipped");
+  document.querySelectorAll("[data-rate]").forEach(b=>b.onclick=()=>{
+    rateCore(q,b.dataset.rate);
+    nextStudyItem();
+  });
+}
+function rateCore(q,rate){
+  state.ratings[q.id]={rate,date:todayISO()};
+  if(rate==="again" || rate==="hard") scheduleReview("core",q.id, rate==="again"?0:1);
+  saveState();
+}
+function scheduleReview(type,id,stage=0){
+  const intervals=DB.reviewIntervalsDays;
+  state.reviewQueue = state.reviewQueue.filter(x=>!(x.type===type && x.id===id));
+  const dueDate=addDays(todayISO(),intervals[Math.min(stage,intervals.length-1)]);
+  state.reviewQueue.push({type,id,stage,dueDate});
+}
+function renderMiniItem(q){
+  $("#itemHost").innerHTML=challengeHTML(q,false);
+  bindChallenge(q, (correct)=>{
+    state.miniResults[q.id]={correct,date:todayISO()};
+    if(!correct) scheduleReview("mini",q.id,0);
+    saveState();
+    $("#miniNext").classList.remove("hidden");
+  });
+  $("#miniNext").onclick=()=>nextStudyItem();
+}
+function challengeHTML(q,reviewMode){
+  return `<section class="challenge" style="margin-top:16px">
+    <div class="between row"><span class="pill blue">${q.kindLabel}</span><span class="pill">${q.unit}</span></div>
+    <h2 style="font-size:18px;margin:14px 0 8px">${q.title}</h2>
+    <div class="stimulus">${renderMathText(q.stimulus)}</div>
+    ${q.graph?chartSVG(q.graph):""}
+    ${q.table?tableHTML(q.table):""}
+    <div class="qtext" style="font-size:18px">${renderMathText(q.question)}</div>
+    <div class="choice-list">
+      ${q.choices.map((c,i)=>`<button class="choice" data-choice="${i}">${String.fromCharCode(65+i)}. ${renderMathText(c)}</button>`).join("")}
+    </div>
+    <div class="explain hidden" id="explain">${renderMathText(q.explanation)}</div>
+    ${reviewMode?"":'<button class="primary hidden" id="miniNext" style="margin-top:14px;width:100%">次へ</button>'}
+  </section>`;
+}
+function bindChallenge(q,done){
+  let answered=false;
+  document.querySelectorAll("[data-choice]").forEach(b=>b.onclick=()=>{
+    if(answered)return; answered=true;
+    const idx=+b.dataset.choice, correct=idx===q.correctIndex;
+    document.querySelectorAll("[data-choice]").forEach(x=>{
+      const xi=+x.dataset.choice;
+      if(xi===q.correctIndex)x.classList.add("correct");
+      else if(xi===idx)x.classList.add("wrong");
+      x.disabled=true;
+    });
+    $("#explain").classList.remove("hidden");
+    done(correct);
+  });
+}
+function nextStudyItem(){
+  const s=studySession;
+  s.index++;
+  if(s.index>=s.items.length){
+    if(!state.completedDays.includes(s.day)) state.completedDays.push(s.day);
+    state.completedDays.sort((a,b)=>a-b);
+    saveState();
+    main().innerHTML=`<div class="card" style="text-align:center;margin-top:40px">
+      <div style="font-size:54px">✓</div><h2>Day ${s.day} 完了</h2>
+      <p class="muted">本質7問 + 共通テスト型3問を完了しました。</p>
+      ${dayData(s.day).isUnitReviewDay?'<div class="notice">単元復習テストが解放されました。</div>':""}
+      <div class="actions" style="justify-content:center"><button class="primary" id="doneHome">ホームへ</button></div>
+    </div>`;
+    $("#doneHome").onclick=()=>setTab("home");
+    return;
+  }
+  renderStudyItem();
+}
+function chartSVG(g){
+  const allSeries = g.series ? g.series : [{name:"",points:g.points||[]}];
+  const pts=allSeries.flatMap(s=>s.points);
+  if(!pts.length)return "";
+  const W=360,H=220,L=46,R=14,T=16,B=36;
+  const xs=pts.map(p=>p[0]), ys=pts.map(p=>p[1]);
+  let xmin=Math.min(...xs), xmax=Math.max(...xs), ymin=Math.min(...ys), ymax=Math.max(...ys);
+  if(xmin===xmax){xmin-=1;xmax+=1} if(ymin===ymax){ymin-=1;ymax+=1}
+  const padx=(xmax-xmin)*.08||1,pady=(ymax-ymin)*.12||1;
+  xmin-=padx;xmax+=padx;ymin-=pady;ymax+=pady;
+  const X=x=>L+(x-xmin)/(xmax-xmin)*(W-L-R);
+  const Y=y=>T+(ymax-y)/(ymax-ymin)*(H-T-B);
+  let lines="";
+  for(let i=0;i<5;i++){
+    const x=L+i*(W-L-R)/4, y=T+i*(H-T-B)/4;
+    lines+=`<line class="gridline" x1="${x}" y1="${T}" x2="${x}" y2="${H-B}"/><line class="gridline" x1="${L}" y1="${y}" x2="${W-R}" y2="${y}"/>`;
+  }
+  const plots=allSeries.map((s,si)=>{
+    const d=s.points.map((p,i)=>(i?"L":"M")+X(p[0]).toFixed(1)+" "+Y(p[1]).toFixed(1)).join(" ");
+    return `<path class="${si===0?"plot":"plot2"}" d="${d}"/>`;
+  }).join("");
+  return `<svg class="svgchart" viewBox="0 0 ${W} ${H}" role="img" aria-label="${escapeHTML(g.xLabel||"")} と ${escapeHTML(g.yLabel||"")} のグラフ">
+    ${lines}<line class="axis" x1="${L}" y1="${H-B}" x2="${W-R}" y2="${H-B}"/><line class="axis" x1="${L}" y1="${T}" x2="${L}" y2="${H-B}"/>
+    ${plots}<text class="charttext" x="${W/2}" y="${H-8}" text-anchor="middle">${escapeHTML(g.xLabel||"")}</text>
+    <text class="charttext" x="14" y="${H/2}" transform="rotate(-90 14 ${H/2})" text-anchor="middle">${escapeHTML(g.yLabel||"")}</text>
+  </svg>`;
+}
+function tableHTML(t){
+  return `<div class="table-wrap"><table><thead><tr>${t.headers.map(x=>`<th>${escapeHTML(x)}</th>`).join("")}</tr></thead><tbody>${t.rows.map(r=>`<tr>${r.map(x=>`<td>${escapeHTML(String(x))}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`;
+}
+
+function renderReview(){
+  const due=dueReviews();
+  main().innerHTML=`
+    <div class="section-title"><h2>期限復習</h2><small>1→3→7→14日</small></div>
+    <div class="notice">「もう一度」「迷った」「不正解」を忘却曲線に合わせて再提示します。</div>
+    <div class="review-list" style="margin-top:12px">
+      ${due.length?due.map((x,i)=>{
+        const q=x.type==="core"?coreById(x.id):miniById(x.id);
+        return `<div class="review-item"><div><strong>${q.unit} · ${x.type==="core"?"本質":"共通テスト型"}</strong><small>${escapeHTML((q.question||q.title).slice(0,42))}…</small></div><button class="primary" data-review="${i}">復習</button></div>`;
+      }).join(""):'<div class="card"><strong>今日の期限復習はありません。</strong><div class="muted" style="margin-top:6px">学習を進めると弱点だけ自動でここに集まります。</div></div>'}
+    </div>`;
+  document.querySelectorAll("[data-review]").forEach(b=>b.onclick=()=>startReviewItem(due[+b.dataset.review]));
+}
+function startReviewItem(item){
+  const q=item.type==="core"?coreById(item.id):miniById(item.id);
+  if(item.type==="core"){
+    main().innerHTML=`<div class="section-title"><h2>期限復習</h2><small>${q.unit}</small></div><div id="itemHost"></div>`;
+    renderCoreReview(q,item);
+  }else{
+    main().innerHTML=`<div class="section-title"><h2>期限復習</h2><small>${q.unit}</small></div>${challengeHTML(q,true)}`;
+    bindChallenge(q,(correct)=>{
+      completeReview(item,correct);
+      const btn=document.createElement("button"); btn.className="primary";btn.style="margin-top:14px;width:100%";btn.textContent="復習一覧へ";btn.onclick=renderReview;
+      document.querySelector(".challenge").appendChild(btn);
+    });
+  }
+}
+function renderCoreReview(q,item){
+  $("#itemHost").innerHTML=`
+    <div class="flip-wrap"><div class="flip" id="flip">
+      <section class="face front"><span class="pill blue">再テスト</span><div class="qtext">${renderMathText(q.question)}</div><button class="primary" id="flipBtn">答えを見る</button></section>
+      <section class="face back"><div class="answer">${renderMathText(q.answer)}</div><div class="essence">${renderMathText(q.essence)}</div>
+      <div class="rating" style="margin-top:auto"><button class="weak" data-rv="0">まだ不安</button><button data-rv="1">ほぼOK</button><button class="ok" data-rv="2">定着</button></div></section>
+    </div></div>`;
+  $("#flipBtn").onclick=()=>$("#flip").classList.add("flipped");
+  document.querySelectorAll("[data-rv]").forEach(b=>b.onclick=()=>{
+    const val=+b.dataset.rv;
+    completeReview(item,val===2,val===0);
+    renderReview();
+  });
+}
+function completeReview(item,correct,reset=false){
+  state.reviewQueue=state.reviewQueue.filter(x=>!(x.type===item.type && x.id===item.id));
+  if(correct){
+    const nextStage=item.stage+1;
+    if(nextStage<DB.reviewIntervalsDays.length) scheduleReview(item.type,item.id,nextStage);
+  }else{
+    scheduleReview(item.type,item.id,reset?0:Math.max(0,item.stage));
+  }
+  state.reviewHistory.push({type:item.type,id:item.id,date:todayISO(),correct});
+  saveState();
+}
+
+function renderTests(){
+  main().innerHTML=`
+    <div class="section-title"><h2>単元復習テスト</h2><small>20問</small></div>
+    <div class="stack">
+      ${DB.reviewTests.map(t=>{
+        const unlocked=state.completedDays.includes(t.unlockDay)||state.completedDays.some(d=>d>t.unlockDay);
+        const score=state.testScores[t.id];
+        return `<div class="card row between">
+          <div><strong>${t.unit}</strong><div class="muted">Day ${t.unlockDay} 解放 · 本質12 + 思考8</div>${score?`<div class="pill" style="margin-top:8px">最高 ${score.best}/20</div>`:""}</div>
+          <button class="${unlocked?"primary":"secondary"}" data-test="${t.id}" ${unlocked?"":"disabled"}>${unlocked?"開始":"未解放"}</button>
+        </div>`;
+      }).join("")}
+    </div>`;
+  document.querySelectorAll("[data-test]").forEach(b=>b.onclick=()=>startTest(b.dataset.test));
+}
+function startTest(id){
+  const t=DB.reviewTests.find(x=>x.id===id);
+  const items=[
+    ...t.coreQuestionIDs.map(id=>({type:"core",id})),
+    ...t.miniProblemIDs.map(id=>({type:"mini",id}))
+  ];
+  const rr=[...items].sort(()=>Math.random()-.5);
+  activeTest={test:t,items:rr,index:0,score:0,wrong:[]};
+  renderTestItem();
+}
+function renderTestItem(){
+  const a=activeTest, item=a.items[a.index], n=a.index+1;
+  if(a.index>=a.items.length){ finishTest(); return; }
+  main().innerHTML=`<div class="study-head"><div><span class="pill blue">${a.test.unit}テスト</span></div><strong>${n}/20</strong></div>
+    <div class="study-progress"><i style="--w:${n/20*100}%"></i></div><div id="testHost"></div>`;
+  if(item.type==="mini"){
+    const q=miniById(item.id);
+    $("#testHost").innerHTML=challengeHTML(q,true);
+    bindChallenge(q,(correct)=>{
+      if(correct)a.score++; else a.wrong.push(item);
+      const btn=document.createElement("button");btn.className="primary";btn.style="margin-top:14px;width:100%";btn.textContent="次へ";
+      btn.onclick=()=>{a.index++;renderTestItem()};document.querySelector(".challenge").appendChild(btn);
+    });
+  }else{
+    const q=coreById(item.id);
+    // Core questions in tests use self-check, because source bank is one-question-one-answer rather than 4-choice.
+    $("#testHost").innerHTML=`<div class="card" style="margin-top:16px"><span class="pill">本質</span><div class="qtext">${renderMathText(q.question)}</div>
+      <button class="primary" id="showTestAns">答えを確認</button><div id="testAns" class="hidden"><div class="essence"><b>解答</b><br>${renderMathText(q.answer)}<br><br>${renderMathText(q.essence)}</div>
+      <div class="rating" style="margin-top:12px"><button class="weak" data-self="0">不正解</button><button class="ok" data-self="1">正解</button><button data-self="1">ほぼ同義</button></div></div></div>`;
+    $("#showTestAns").onclick=()=>$("#testAns").classList.remove("hidden");
+    document.querySelectorAll("[data-self]").forEach(b=>b.onclick=()=>{
+      const correct=+b.dataset.self===1;if(correct)a.score++;else a.wrong.push(item);a.index++;renderTestItem();
+    });
+  }
+}
+function finishTest(){
+  const a=activeTest,id=a.test.id,prev=state.testScores[id]?.best||0;
+  state.testScores[id]={best:Math.max(prev,a.score),last:a.score,date:todayISO(),wrong:a.wrong};
+  a.wrong.forEach(x=>scheduleReview(x.type,x.id,0));
+  saveState();
+  const pct=Math.round(a.score/20*100);
+  main().innerHTML=`<div class="card" style="text-align:center;margin-top:28px"><div class="pill blue">${a.test.unit}</div>
+    <div class="score ${pct>=80?"result-ok":"result-warn"}">${a.score}<span style="font-size:20px"> /20</span></div>
+    <h2>${pct>=80?"合格ライン":"復習して再挑戦"}</h2><p class="muted">誤答 ${a.wrong.length}問は期限復習へ自動登録しました。</p>
+    <div class="actions" style="justify-content:center"><button class="primary" id="backTests">テスト一覧</button><button class="secondary" id="goReview">弱点復習</button></div></div>`;
+  $("#backTests").onclick=renderTests;$("#goReview").onclick=()=>setTab("review");
+}
+
+function renderSettings(){
+  main().innerHTML=`
+    <div class="section-title"><h2>設定</h2></div>
+    <div class="card">
+      <div class="setting-row"><div><strong>表示テーマ</strong><div class="muted">システム / ライト / ダーク</div></div>
+        <select id="themeSelect"><option value="system">システム</option><option value="light">ライト</option><option value="dark">ダーク</option></select></div>
+      <div class="setting-row"><div><strong>学習データを書き出す</strong><div class="muted">iPhoneの機種変更前のバックアップ用</div></div><button class="secondary" id="exportBtn">書き出し</button></div>
+      <div class="setting-row"><div><strong>学習データを読み込む</strong><div class="muted">書き出したJSONを復元</div></div><button class="secondary" id="importBtn">読み込む</button><input id="importFile" type="file" accept="application/json" hidden></div>
+      <div class="setting-row"><div><strong>初期化</strong><div class="muted">この端末の進捗を消去</div></div><button class="secondary" id="resetBtn">リセット</button></div>
+    </div>
+    <div class="section-title"><h2>このアプリについて</h2></div>
+    <div class="notice">データは端末内に保存されます。外部ライブラリ・広告・トラッキング・ネット通信は使用しません。初回読込後はオフラインでも利用できます。</div>`;
+  $("#themeSelect").value=state.theme;
+  $("#themeSelect").onchange=e=>{state.theme=e.target.value;saveState();applyTheme()};
+  $("#exportBtn").onclick=()=>{
+    const blob=new Blob([JSON.stringify(state,null,2)],{type:"application/json"});
+    const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="physics-essence90-backup.json";a.click();URL.revokeObjectURL(a.href);
+  };
+  $("#importBtn").onclick=()=>$("#importFile").click();
+  $("#importFile").onchange=async e=>{
+    try{ const data=JSON.parse(await e.target.files[0].text()); state=Object.assign(defaultState(),data);saveState();toast("復元しました");renderSettings();}
+    catch(err){toast("読み込みに失敗しました");}
+  };
+  $("#resetBtn").onclick=()=>{
+    if(confirm("学習進捗をすべて消去しますか？")){state=defaultState();saveState();applyTheme();toast("初期化しました");renderSettings();}
+  };
+}
+async function init(){
+  loadState();
+  DB = EMBEDDED_DB;
+  document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>setTab(b.dataset.tab));
+  $("#themeBtn").onclick=()=>{state.theme=(document.documentElement.dataset.theme==="dark"?"light":"dark");saveState();applyTheme();};
+  updateBadge(); renderHome();
+  // file:// preview: Service Worker intentionally disabled.
+}
+document.addEventListener("DOMContentLoaded",init);
+
+  </script>
+</body>
+</html>
